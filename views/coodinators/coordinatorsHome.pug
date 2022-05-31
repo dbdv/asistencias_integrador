@@ -1,0 +1,59 @@
+doctype html
+html
+  head
+    title Materias
+    link(rel="icon" type="image/png" href="/images/favicon.ico")
+    link(rel="stylesheet", href="/stylesheets/coordinators/subject.css")
+    
+  body
+    div.mainContainer
+        div.nav#nav 
+            h1=coordinator
+            div.navButtons
+                //-button(id="showModal" onclick="toggleInscripForm()") Anotarme a una materia
+                button(onclick="logout();") Cerrar sesión
+        ul.ul#ul
+            div.li
+                    h3.liHeader Materia
+                    h3.liHeader.flexMinus Asistencia
+                    h3.liHeader.flexMinus Responsable 
+                    h3.blankH3.flexMinus
+            each subj in SUBJECTS 
+                div.li 
+                    h3=subj.title
+                    div.divCircles.flexMinus
+                        p=`${subj.average * 100}%`
+                        div(id="greenCircle" class=`circle ${subj.average >= 0.75 ? "activeCircle" : "inactiveCircle"}`)
+                        div(id="yellowCircle" class=`circle ${subj.average < 0.75 ? (subj.average >= 0.5 ? "activeCircle" : "inactiveCircle") : "inactiveCircle"}`)
+                        div(id="redCircle" class=`circle ${subj.average < 0.5 ? "activeCircle" : "inactiveCircle"}`)
+                    div.flexMinus
+                        select(id=`select${subj.id}`)
+                            option(value="1") Macarena Ruiz  
+                            option(value="4") Julian Rios  
+                            option(value="15") Sofia Reyes
+                            option(value="10") Manuel Diaz  
+                    div.subjectsButtons.flexMinus
+                        //-a(href=`/coordinators/subject/${subj.id}`) 
+                        button(onclick=`updateProf(${subj.id})`) Actualizar
+        
+    script.
+        function logout(){
+            console.log("chau")
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "/auth/logout", true);
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                // Response
+                var response = this.responseText;
+                }
+            };
+            xhttp.send();
+            setTimeout(()=>{
+                location.replace("/");
+            }, 1000)
+        }
+
+        function updateProf(id){
+            console.log("updated")
+        }

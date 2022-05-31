@@ -1,0 +1,201 @@
+:root {
+  --main: #2f6083;
+  --accent: #3b78a3;
+  --green-btn: #529a2d;
+  --green-btn-light: #629c46;
+  --blue-btn: #2766be;
+  --blue-btn-light: #517fc0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+body {
+    background-image: url("../../images/bg_bggenerator_com.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.mainContainer {
+  max-width: 100%;
+  min-height: 80vh;
+  max-height: 100vh;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.nav {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--main);
+  color: white;
+  /* border: 1px solid var(--accent); */
+  border-radius: 10px 10px 0 0;
+}
+
+.nav > h1 {
+    flex: 1;
+}
+
+.navButtons {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+
+.navButtons > button,
+h1,
+h4,
+.li > h3,
+.li > div > button {
+  padding: 5px;
+  margin: 5px;
+}
+
+.ul {
+  /*margin-top: 1px;
+  */
+  width: 100%;
+  max-width: 800px;
+}
+
+.li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  background: white;
+  margin: 3px 0;
+}
+
+.li > h3, .subjectsButtons {
+    flex: 1;
+}
+
+.subjectsButtons {
+    display: flex;
+    justify-content: right;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+
+#showModal, #markAttendance {
+    color: white;
+    font-weight: bold;
+}
+#showModal {
+    background: var(--green-btn);
+}
+
+#showModal:hover {
+    background: var(--green-btn-light);
+}
+
+#markAttendance {
+    background: var(--blue-btn);
+}
+
+#markAttendance:hover {
+    background: var(--blue-btn-light);
+}
+
+.on-back {
+    opacity: 50%;
+}
+
+.modal-off{
+    display: none;
+}
+
+.modal {
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s ease-in-out;
+}
+
+.div-modal > h1{
+    color: white;
+    margin: 20px 0;
+}
+
+.div-modal {
+    /*height: 300px;
+    */
+    display: flex;
+    background: var(--main);
+    border-radius: 10px;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal > .div-modal > form {
+    width: 350px;
+    height: 100px;
+    background: var(--main);
+    display: flex;
+    flex-direction: column;
+    padding: 0 50px 50px 50px;
+    color: white;
+}
+
+.modal > .div-modal > form > input {
+    padding: 5px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.modal > .div-modal > form > div {
+    display: flex;
+}
+
+.modal > .div-modal > form > div > label, .modal > .div-modal > form > div > select, .modal > .div-modal > form > div > button  {
+    padding: 5px;
+    margin: 5px;
+}
+
+.modal > .div-modal > form > div > select, .modal > .div-modal > form > div > button {
+    flex: 1;
+}
+
+.modal > .div-modal > form > div > button {
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: darkslategrey;
+    font-weight: bold;
+}
+
+#signUP {
+    color: white;
+    background: var(--green-btn);
+}
+
+#signUP:hover {
+    background: var(--green-btn-light);
+}

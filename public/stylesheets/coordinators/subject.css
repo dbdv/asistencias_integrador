@@ -1,0 +1,187 @@
+:root {
+  --main: #2f6083;
+  --accent: #3b78a3;
+  --green-btn: #529a2d;
+  --green-btn-light: #57883f;
+  --blue-btn: #2766be;
+  --blue-btn-light: #517fc0;
+  --red-btn: rgb(190, 54, 54);
+  --red-btn-light: rgb(179, 50, 50);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-image: url("../../images/bg_bggenerator_com.png");
+  background-repeat: no-repeat;
+  background-size: auto;
+}
+
+.mainContainer {
+  max-width: 100%;
+  min-height: 80vh;
+  max-height: 100vh;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.nav {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--main);
+  color: white;
+  /* border: 1px solid var(--accent); */
+  border-radius: 10px 10px 0 0;
+  /* position: fixed; */
+}
+
+.nav > h1 {
+  flex: 1;
+}
+
+.navButtons {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: left;
+}
+
+.navButtons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+button,
+a,
+h1,
+h3,
+h5,
+ul,
+li,
+li > div {
+  padding: 5px;
+  margin: 5px;
+  list-style-type: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  /* font-weight: bold; */
+  font-size: 0.9rem;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+a:visited {
+  color: black;
+}
+
+ul {
+  width: 100%;
+  max-width: 800px;
+  box-sizing: border-box;
+}
+
+
+.li {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.li > h3 {
+  width: 200px;
+  font-size: 1rem;
+  text-align: left;
+}
+
+.liHeader {
+  font-size: 1.3em !important;
+}
+
+
+
+.li:nth-child(n), .li > div {
+  padding: 5px;
+  margin: 5px;
+  flex: 1;
+}
+
+.divCircles {
+  display: flex;
+  justify-content: left !important;
+  align-items: center;
+}
+
+.circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background: #000;
+  margin-left: 3px;
+  border: .01rem solid black;
+}
+
+#greenCircle {
+  background: rgb(13, 218, 13);
+}
+
+#yellowCircle {
+  background: yellow;
+}
+
+#redCircle {
+    background: red;
+}
+
+.activeCircle {
+    opacity: 100%;
+}
+
+.inactiveCircle {
+    opacity: 30%;
+}
+
+.subjectsButtons > button {
+    background: var(--blue-btn);
+    border-radius: 5px;
+    color: white;
+}
+
+.subjectsButtons > a:visited {
+    color: white;
+}
+
+.subjectsButtons > button:hover {
+    background: var(--blue-btn-light);
+}
+
+.flexMinus {
+    flex: 1;
+    justify-content: center;
+}
+
+/* .blankH3 {
+    max-width: 65px;
+    padding: 1px;
+} */

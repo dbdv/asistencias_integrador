@@ -1,0 +1,55 @@
+doctype html
+html
+    head
+        title=`Asistencias a ${course.title}`
+        link(rel="icon" type="image/png" href="/images/favicon.ico")
+        link(rel="stylesheet" href="/stylesheets/proffessors/courseAttendance.css")
+    
+    body
+        div.mainContainer
+            nav.nav#nav 
+                h1=`Asistencias a ${course.title}`
+                div.navButtons
+                    a(href=`/proffessors/myCourses/course/${course.id}`)
+                        button Volver atrás
+                    button(onclick="logout()") Cerrar sesión
+            section 
+                div 
+                    select(name="")
+                        each month in MONTHS
+                            option(value=month.name)=month.name  
+                    a(href=`/proffessors/myCourses/course/${course.id}/attendance/download`) 
+                        button(id="downloadExcel") Descargar excel
+                div 
+                    ul 
+                        li 
+                            div
+                                p.alumno Usuario
+                                p.alumno Nombre
+                                p.alumno Apellido
+                                each day in MONTHS[0]["daysFebrero"]
+                                    p.day=day
+                            each student in STUDENTS 
+                                div 
+                                    p.alumno=student.user
+                                    p.alumno=student.first_name
+                                    p.alumno=student.last_name
+                                    each atten in student.ATTENS 
+                                        p=atten
+            script.
+                function logout(){
+                    console.log("chau")
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.open("POST", "/auth/logout", true);
+                    xhttp.setRequestHeader("Content-Type", "application/json");
+                    xhttp.onreadystatechange = function () {
+                        if (this.readyState == 4 && this.status == 200) {
+                        // Response
+                        var response = this.responseText;
+                        }
+                    };
+                    xhttp.send();
+                    setTimeout(()=>{
+                        location.replace("/");
+                    }, 700)
+                }

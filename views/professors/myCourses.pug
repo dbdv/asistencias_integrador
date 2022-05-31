@@ -1,0 +1,39 @@
+doctype html
+html
+    head
+        title Mis cursos
+        link(rel="icon" type="image/png" href="/images/favicon.ico")
+        link(rel="stylesheet" href="/stylesheets/proffessors/myCourses.css")
+
+    body
+        div.mainContainer
+            div.nav#nav 
+                h1=professor
+                div.navButtons
+                    //-button(id="showModal" onclick="toggleInscripForm()") Anotarme a una materia
+                    button(onclick="logout();") Cerrar sesión
+            h2  Mis cursos
+            ul.ul#ul
+                each course in COURSES 
+                    div.li 
+                        h3=course.title
+                        div.subjectsButtons
+                            a(href=`/professors/myCourses/course/${course.id}` id="courseHandler") Administrar
+
+        script.
+            function logout(){
+                console.log("chau")
+                var xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "/auth/logout", true);
+                xhttp.setRequestHeader("Content-Type", "application/json");
+                xhttp.onreadystatechange = function () {
+                    if (this.readyState == 4 && this.status == 200) {
+                    // Response
+                    var response = this.responseText;
+                    }
+                };
+                xhttp.send();
+                setTimeout(()=>{
+                    location.replace("/");
+                }, 1000)
+            }

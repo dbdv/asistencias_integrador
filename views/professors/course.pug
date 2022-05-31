@@ -1,0 +1,173 @@
+doctype html
+html
+  head
+    title=course.title
+    link(rel="icon" type="image/png" href="/images/favicon.ico")
+    link(rel="stylesheet", href="/stylesheets/proffessors/course.css")
+    
+  body
+    div.mainContainer
+        nav.nav#nav 
+            h1=course.title
+            div.navButtons
+                a(href="/professors/myCourses")
+                    button Volver atrás
+                button(onclick="logout();") Cerrar sesión
+                
+        section  
+            h3 Nuevas inscripciones
+            if REQUESTS.length !== 0
+                ul 
+                    li.headersLi
+                        div.name
+                            h4 Nombre
+                        div.name
+                            h4 Apellido
+                        div 
+                            h4 DNI
+                        div.email 
+                            h4 Usuario
+                        div 
+                            h4 Carrera
+                        div
+                            h4 Respuesta
+                    each request in REQUESTS
+                        li.reqLi
+                            div.reqData.name 
+                                h4=request.first_name
+                            div.reqData.name 
+                                h4=request.last_name
+                            div.reqData 
+                                h4=request.dni
+                            div.reqData.email 
+                                h4=request.email
+                            div.reqData 
+                                h4=request.carrer
+                            div.requestButtonsDiv 
+                                button#acceptBtn OK 
+                                button#declineBtn X
+            else 
+                h5 No hay solicitudes pendientes
+        section 
+            h3 Alumnos
+            if MATRICULATES.length !== 0
+                ul 
+                    li.headersLi
+                        div.name
+                            h4 Nombre
+                        div.name
+                            h4 Apellido
+                        div 
+                            h4 DNI
+                        div.email 
+                            h4 Usuario
+                        div 
+                            h4 Carrera
+                        div
+                            h4 Dar de baja
+                    each matriculate in MATRICULATES
+                        li.matriLi
+                            div
+                                div.reqData.name 
+                                    h4=matriculate.student.first_name
+                                div.reqData.name 
+                                    h4=matriculate.student.last_name
+                                div.reqData 
+                                    h4=matriculate.student.dni
+                                div.reqData.email 
+                                    h4=matriculate.student.email
+                                div.reqData 
+                                    h4=matriculate.student.carrer
+                                div.matriButtonsDiv 
+                                    button#dropOutBtn X
+                            if matriculate.schdConflicts.active
+                                div.conflictsDiv 
+                                    div
+                                        span Superposición de horarios con: 
+                                    div 
+                                        each subject in matriculate.schdConflicts.subjects
+                                            span=subject
+
+            else    
+                h5 No hay alumnos inscriptos a la materia   
+        section  
+            h3 Horarios de la materia
+            .schedule
+                each day in Object.keys(course.week)
+                    div.scheduleDiv
+                        input(type="checkbox" value=day checked=course.week[day].scheduled) 
+                        label=day
+                        select(name="start" id=`${day}StartSelect`)
+                            each hour in HOURS_START
+                                option(value=hour id=`${day}start${hour}` )=hour
+                        select(name="end" id=`${day}EndSelect`) 
+                            each hour in HOURS_END
+                                option(value=hour id=`${day}end${hour}`)=hour
+
+                        button(id="saveChangesBtn" onclick=`validateHours("${day}")`) Guardar
+            h3 Fechas excepcionales
+            .exceptedDays
+                div 
+                    label Nueva fecha
+                    input(type="date")
+                    button(id="addDateBtn") Añadir
+                ul 
+                    li 
+                        div.dates
+                            h3 17/07
+                            button#deleteDateBtn Eliminar
+
+        section.bottomButtons
+            div  
+                a(href=`/proffessors/myCourses/course/${course.id}/attendance`) 
+                    button Ver asistencias 
+                a(href=`/proffessors/myCourses/course/${course.id}/attendance/download`) 
+                    button(id="downloadExcel") Descargar excel
+    script.
+        window.onload = function(){
+            const week = !{JSON.stringify(course.week)}
+            //console.log(week)
+            for(const day in week){
+                if(week[day].scheduled){
+                    document.getElementById(`${day}start${week[day].startAt}`).setAttribute("selected", true);
+                    document.getElementById(`${day}end${week[day].endAt}`).setAttribute("selected", true);
+                }
+            }
+        }
+
+        function preventSubmit(){
+            return false;
+        }
+        function logout(){
+            console.log("chau")
+            var xhttp = new XMLHttpRequest();
+            xhttp.open("POST", "/auth/logout", true);
+            xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                // Response
+                var response = this.responseText;
+                }
+            };
+            xhttp.send();
+            setTimeout(()=>{
+                location.replace("/");
+            }, 700)
+        }
+
+        function validateHours(day){
+            const startAt = document.querySelector(`#${day}StartSelect`), 
+                endAt = document.querySelector(`#${day}EndSelect`);
+            let hours = [startAt[startAt.selectedIndex].value, endAt[endAt.selectedIndex].value]
+            hours = [hours[0].split(":"), hours[1].split(":")]
+
+            if(parseInt(hours[0][0]) > parseInt(hours[1][0])){
+                alert("La hora de finalizacion no puede ser anterior a la de inicio")
+                return false;
+            }
+            if(hours[0][0] == hours[1][0] && parseInt(hours[0][1]) > parseInt(hours[1][1])){
+                alert("La hora de finalizacion no puede ser anterior a la de inicio")
+                return false;
+            }
+            console.log(hours)
+        }
