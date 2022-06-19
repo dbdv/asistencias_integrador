@@ -1,3 +1,4 @@
+//-----------Configs
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
@@ -5,6 +6,16 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var session = require("express-session");
 
+require("dotenv").config();
+//-------------Middlewares
+const { isAuthenticated } = require("./middlewares/isAuthenticated");
+const {
+  isCoordinator,
+  isProfessor,
+  isStudent,
+} = require("./middlewares/isAuthorized");
+
+//-------------Routers
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var authRouter = require("./routes/auth");
@@ -14,7 +25,7 @@ var coordinatorsRouter = require("./routes/coordinators/coordinators");
 
 var app = express();
 
-// view engine setup
+//-------------view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
@@ -31,12 +42,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+//-----TEST
+const { getUser } = require("./controllers/User.controller");
+//---------
+
+//--------------Routes
+
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
-app.use("/users", usersRouter);
-app.use("/students", studentsRouter);
-app.use("/professors", professorsRouter);
-app.use("/coordinators", coordinatorsRouter);
+// app.use("/users", usersRouter);
+app.use(isAuthenticated);
+app.use("/students", isStudent, studentsRouter);
+app.use("/professors", isProfessor, professorsRouter);
+app.use("/coordinators", isCoordinator, coordinatorsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

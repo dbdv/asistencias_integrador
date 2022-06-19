@@ -1,21 +1,20 @@
 var express = require("express");
 var router = express.Router();
+const { allSubjects } = require("../../controllers/Subject.controller");
+const { getUser } = require("../../controllers/User.controller");
 
+router.get("/", async function (req, res, next) {
+  const { email, role } = req.session;
+  console.log("cookie en /coordinators: " + role);
+  if (!role == "Coordinator") res.status(403).redirect("/");
+  const SUBJECTS = await allSubjects();
 
-router.get("/", function (req, res, next) {
-  console.log("cookie en /coordinators: " + req.session.role);
-  if (req.session.role == "coordinator") {
-    const SUBJECTS = [
-      { id: "1", title: "Bases de datos", average: 0.8 },
-      { id: "3", title: "Ingenieria", average: 0.6 },
-      { id: "5", title: "Laboratorio I", average: 0.4 },
-    ];
-
-    const coordinator = "Sergio Ramos"
-    return res.render("coodinators/coordinatorsHome.pug", { coordinator , SUBJECTS });
-  }
-  res.status(403);
-  return res.redirect("/");
+  const coordinator = await getUser(email);
+  console.log();
+  return res.render("coodinators/coordinatorsHome.pug", {
+    coordinator: `${coordinator.first_name} ${coordinator.last_name}`,
+    SUBJECTS,
+  });
 });
 
 router.get("/subeject/:id", function (req, res, next) {

@@ -3,6 +3,7 @@ block headers
   title Sistema de asistencias ULP 
   link(rel="icon" type="image/png" href="images/favicon.ico")
   link(rel='stylesheet', href='/stylesheets/index.css')
+  script(defer src="/javascript/index.js") 
 block content
   .mainContainer
     //-.imgIndex#imgIndex 
@@ -11,9 +12,11 @@ block content
       h1 Sistema de asistencias ULP
       .main-buttons
       .login 
-        form(method="post" onsubmit="return preventSubmit();")
-          if message
-            span(id="span") Usuario o contraseña incorrectos
+
+        //form(method="post" onsubmit="return preventSubmit();")
+        .form
+          //if message
+          span(id="span" class="login-error") Usuario o contraseña incorrectos
           input(type="email" placeholder="Correo" id="emailLog" required="true" onfocus="fadeSpan()")
           input(type="password" placeholder="Contraseña" id="passLog" required="true" onfocus="fadeSpan()")
           button(id="login" onclick="ingresar();") Iniciar sesion
@@ -29,11 +32,7 @@ block content
           input(type="text" placeholder="Apellido" required="required" id="inp-lastName")
           input(type="email" placeholder="Email" required="required" id="inp-email")
           input(type="password" placeholder="Contraseña" required="required" id="inp-pass")
-          div
-            label Carrera
-            select(id="inp-career" required="required")
-              option(value="1") TUDS 
-              option(value="2") Edicion
+          
           div 
             button#signUP Registrarme 
             button(id="cancel" onclick="return toggleSignForm();" onsubmit="()=>false;") Cancelar
@@ -48,122 +47,4 @@ block content
           span Registro exitoso
           button(onclick="fadeSignMessage()") ok
 
-  script.
-
-    function ingresar(){
-      const regexEmail = /^[a-zA-Z]+@+[a-zA-Z]+.+com$/
-      const user = {
-        email: document.querySelector("#emailLog").value,
-        pass: document.querySelector("#passLog").value,
-      };
-
-      //console.table(user)
-
-      if (!user.email || !user.email) {
-        alert("No completó todos los campos.");
-        return false;
-      }
-
-      if(!regexEmail.test(user.email)){
-        alert("Correo invalido.")
-        return false;
-      }
-
-      var xhttp = new XMLHttpRequest();
-      xhttp.open("POST", "/auth", true);
-      xhttp.setRequestHeader("Content-Type", "application/json");
-      xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          // Response
-          var response = this.responseText;
-        }
-      };
-      var data = { ...user };
-      console.table(data)
-      xhttp.send(JSON.stringify(data));
-      setTimeout(()=>{
-        location.reload();}
-      , 800)
-    }
-
-    document.onkeydown = function(evt) {
-      
-      if(document.getElementsByClassName("modal").length !== 0){
-        //console.log(document.getElementsByClassName("modal"))
-        evt = evt || window.event;
-        if (evt.keyCode == 27) {
-            toggleSignForm();
-        }
-      }
-    };
-
-
-    function preventSubmit(){
-      return false;
-    }
-
-    function toggleSignForm(){
-      
-      document.getElementById("modal").classList.toggle("modal");
-      //document.getElementById("imgIndex").classList.toggle("on-back");
-      document.getElementById("div").classList.toggle("on-back");
-      
-    }
-
-    function fadeSpan(){
-      if(document.querySelector("#span") !== null)
-        document.querySelector("#span").classList.add("spanOut")
-    }
-
-    function fadeSignMessage(){
-      document.querySelector("#signYes").classList.toggle("modal")
-      document.querySelector("#signYes").classList.toggle("modal-off-msg")
-    }
-
-    const signUP_btn = document.querySelector("#signUP");
-    signUP_btn.addEventListener("click", ()=>{
-      
-      const regexEmail = /^[a-zA-Z]+@+[a-zA-Z]+.+com$/
-      const user = {
-        email: document.querySelector("#inp-email").value,
-        pass: document.querySelector("#inp-pass").value,
-        career: document.querySelector("#inp-career")[document.querySelector("#inp-career").selectedIndex].value,
-        dni: document.querySelector("#inp-dni").value,
-        firstName: document.querySelector("#inp-firstName").value,
-        lastName: document.querySelector("#inp-lastName").value,
-      };
-
-      //console.table(user)
-
-      if (!user.email || !user.pass || !user.firstName || !user.lastName || !user.dni || !user.career) {
-        alert("No completó todos los campos.");
-        return false;
-      }
-
-      if(!regexEmail.test(user.email)){
-        alert("Correo invalido.")
-        return false;
-      }
-
-       var data = {}
-      var xhttp = new XMLHttpRequest();
-      xhttp.open("POST", "/auth/signUp", true);
-      xhttp.setRequestHeader("Content-Type", "application/json");
-      xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          console.log("por mandar")
-        }
-      };
-      data = { ...user };
-      setTimeout(()=>{
-          xhttp.send(JSON.stringify(data));
-          //document.querySelector("#signYes").classList.toggle("modal");
-
-          setTimeout(()=>{
-            //document.querySelector("#signYes").classList.toggle("modal");
-            //toggleSignForm()
-            location.reload()
-          }, 1500)
-        }
-      , 1000)
-    })
+  
