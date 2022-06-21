@@ -14,7 +14,7 @@ UserSubject.init(
       type: DataTypes.STRING,
     },
   },
-  { sequelize: DB, modelName: "UserSubject" }
+  { sequelize: DB, modelName: "UserSubject", timestamps: false }
 );
 
 /* UserSubject.hasOne(User, {

@@ -17,7 +17,7 @@ Attendance.init(
       type: DataTypes.DATE,
     },
   },
-  { sequelize: DB, modelName: "Attendance" }
+  { sequelize: DB, modelName: "Attendance", timestamps: false }
 );
 
 Attendance.belongsTo(Registration, {

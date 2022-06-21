@@ -1,7 +1,10 @@
 var express = require("express");
 var router = express.Router();
 
-const { validateUser } = require("../controllers/Auth.controller");
+const {
+  validateUser,
+  registerUser,
+} = require("../controllers/Auth.controller");
 
 router.post("/", function (req, res, next) {
   //   console.log("llegó a /auth");
@@ -32,10 +35,6 @@ router.post("/logout", function (req, res, next) {
   }, 500);
 });
 
-router.post("/signUp", function (req, res, next) {
-  // console.log("llegó a /auth/signUp");
-  // console.log(req);
-  const { email, pass, dni, firstName, lastName, career } = req.body;
-});
+router.post("/signUp", registerUser);
 
 module.exports = router;

@@ -19,7 +19,7 @@ User.init(
     email: {
       type: DataTypes.STRING,
     },
-    pass: {
+    password: {
       type: DataTypes.STRING,
     },
     dni: {
@@ -29,7 +29,7 @@ User.init(
       type: DataTypes.INTEGER,
     },
   },
-  { sequelize: DB, modelName: "User" }
+  { sequelize: DB, modelName: "User", timestamps: false }
 );
 
 User.belongsTo(Role, {

@@ -19,7 +19,7 @@ ScheduleSubject.init(
       type: DataTypes.INTEGER,
     },
   },
-  { sequelize: DB, modelName: "ScheduleSubject" }
+  { sequelize: DB, modelName: "ScheduleSubject", timestamps: false }
 );
 
 ScheduleSubject.hasOne(Schedule, {

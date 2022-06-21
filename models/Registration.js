@@ -22,7 +22,7 @@ Registration.init(
       type: DataTypes.BOOLEAN,
     },
   },
-  { sequelize: DB, modelName: "Registration" }
+  { sequelize: DB, modelName: "Registration", timestamps: false }
 );
 
 Registration.hasOne(User, {

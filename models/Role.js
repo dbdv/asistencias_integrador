@@ -13,7 +13,7 @@ Role.init(
       type: DataTypes.STRING,
     },
   },
-  { sequelize: DB, modelName: "Role" }
+  { sequelize: DB, modelName: "Role", timestamps: false }
 );
 
 module.exports = Role;

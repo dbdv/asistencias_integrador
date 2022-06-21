@@ -16,7 +16,7 @@ Subject.init(
       type: DataTypes.STRING,
     },
   },
-  { sequelize: DB, modelName: "Subject" }
+  { sequelize: DB, modelName: "Subject", timestamps: false }
 );
 
 /* Subject.belongsToMany(User, {

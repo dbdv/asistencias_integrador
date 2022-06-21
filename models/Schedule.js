@@ -22,7 +22,7 @@ Schedule.init(
       type: DataTypes.STRING,
     },
   },
-  { sequelize: DB, modelName: "Schedule" }
+  { sequelize: DB, modelName: "Schedule", timestamps: false }
 );
 
 Schedule.hasMany(Subject, {

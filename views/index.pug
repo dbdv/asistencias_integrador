@@ -13,20 +13,20 @@ block content
       .main-buttons
       .login 
 
-        //form(method="post" onsubmit="return preventSubmit();")
-        .form
+        form(method="post" class="form")
+          //- .form
           //if message
           span(id="span" class="login-error") Usuario o contraseña incorrectos
           input(type="email" placeholder="Correo" id="emailLog" required="true" onfocus="fadeSpan()")
           input(type="password" placeholder="Contraseña" id="passLog" required="true" onfocus="fadeSpan()")
-          button(id="login" onclick="ingresar();") Iniciar sesion
+          button(id="login" onclick="ingresar(event);") Iniciar sesion
           hr
           //-input(type="button" value="Registrarme" onclick="showSingForm();")
-          button(onclick="return toggleSignForm();" onsubmit="()=>false;") Registrarse
+          button(onclick="return toggleSignForm();" /*onsubmit="()=>false;"*/) Registrarse
     .modal-off#modal
       .div-modal
         h1 Formulario de registro
-        form(action="" onsubmit="return preventSubmit();")
+        form( method="POST")
           input(type="number" placeholder="DNI" required="required" id="inp-dni")
           input(type="text" placeholder="Nombre" required="required" id="inp-firstName")
           input(type="text" placeholder="Apellido" required="required" id="inp-lastName")
@@ -34,7 +34,7 @@ block content
           input(type="password" placeholder="Contraseña" required="required" id="inp-pass")
           
           div 
-            button#signUP Registrarme 
+            button(id="signUP" type="submit" onclick="return handleSubmit(event);") Registrarme 
             button(id="cancel" onclick="return toggleSignForm();" onsubmit="()=>false;") Cancelar
     if already
       div(class="modal" id="signYes")
