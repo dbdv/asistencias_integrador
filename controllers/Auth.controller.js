@@ -26,8 +26,9 @@ const validateUser = async (req, res, next) => {
     req.session.token = generateToken(user.id);
     req.session.role = user.Role.name;
     req.session.email = email;
+    req.session.idUser = user.id;
 
-    res.status(200).send();
+    res.status(200).redirect("/" + user.Role.name);
   } catch (err) {
     console.error("Unable to connect to database to get user", err);
   }

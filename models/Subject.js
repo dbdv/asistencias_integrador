@@ -19,32 +19,4 @@ Subject.init(
   { sequelize: DB, modelName: "Subject", timestamps: false }
 );
 
-/* Subject.belongsToMany(User, {
-  through: UserSubject,
-  as: "Subjects",
-}); */
-/* Subject.hasMany(User, {
-  through: UserSubject,
-  as: "Users",
-});
-
-User.hasMany(Subject, {
-  through: UserSubject,
-  as: "Subjects",
-}); */
-
-/* User.belongsToMany(
-  Subject,
-  {
-    through: UserSubject,
-    as: "Users",
-  },
-  { sequelize: DB, modelName: "Subject" }
-);
-
-UserSubject.hasOne(Subject, {
-  as: "Subject",
-  foreignKey: "id_subject",
-});
- */
 module.exports = Subject;

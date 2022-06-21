@@ -52,9 +52,9 @@ app.use("/", indexRouter);
 app.use("/auth", authRouter);
 // app.use("/users", usersRouter);
 app.use(isAuthenticated);
-app.use("/students", isStudent, studentsRouter);
-app.use("/professors", isProfessor, professorsRouter);
-app.use("/coordinators", isCoordinator, coordinatorsRouter);
+app.use("/Student", isStudent, studentsRouter);
+app.use("/Professor", isProfessor, professorsRouter);
+app.use("/Coordinator", isCoordinator, coordinatorsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

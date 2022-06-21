@@ -14,12 +14,7 @@ UserSubject.init(
       type: DataTypes.STRING,
     },
   },
-  { sequelize: DB, modelName: "UserSubject", timestamps: false }
+  { sequelize: DB, modelName: "users-subjects", timestamps: false }
 );
 
-/* UserSubject.hasOne(User, {
-  as: "User",
-  foreignKey: "id_user",
-});
- */
 module.exports = UserSubject;

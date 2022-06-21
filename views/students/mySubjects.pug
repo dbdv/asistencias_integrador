@@ -7,7 +7,7 @@ html
   body
     div.mainContainer
         nav.nav#nav 
-            h1=student 
+            h1=`${student.first_name} ${student.last_name}` 
             div.navButtons
                 button(id="showModal" onclick="toggleInscripForm()") Anotarme a una materia
                 button(onclick="logout()") Cerrar sesión

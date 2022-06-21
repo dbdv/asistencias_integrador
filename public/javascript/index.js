@@ -70,6 +70,7 @@ const ingresar = (evt) => {
     if (res.status === 404 || res.status === 401)
       errorSpan.classList.add("login-error-on");
     console.log("todo ok");
+    location.reload();
   });
 };
 

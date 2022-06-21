@@ -1,6 +1,9 @@
 const { Model, DataTypes } = require("sequelize");
 const DB = require("./DB");
 const Role = require("./Role");
+const Subject = require("./Subject");
+const UserSubject = require("./User-Subject");
+const SubjectUser = require("./User-Subject");
 
 class User extends Model {}
 User.init(
@@ -36,10 +39,37 @@ User.belongsTo(Role, {
   as: "Role",
   foreignKey: "id_role",
 });
-
+/*
 Role.hasMany(User, {
   as: "User",
-  foreignKey: "id_role",
+  foreignKey: "id_user",
+});*/
+/*
+User.hasMany(Subject, {
+  as: "Subjects",
+  foreignKey: "id_subject",
+});*/
+
+User.belongsToMany(Subject, {
+  as: "Subjects",
+  through: UserSubject,
+  foreignKey: "id_user",
 });
+
+Subject.belongsToMany(User, {
+  as: "Users",
+  through: SubjectUser,
+  foreignKey: "id_subject",
+});
+/*
+SubjectUser.hasOne(User, {
+  as: "User",
+  foreignKey: "id_user",
+});*/
+/*
+SubjectUser.hasOne(Subject, {
+  as: "Subject",
+  foreignKey: "id_subject",
+});*/
 
 module.exports = User;
