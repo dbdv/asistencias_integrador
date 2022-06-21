@@ -1,6 +1,8 @@
 const DB = require("../models/DB");
 const UserModel = require("../models/User");
 
+const { allSubjects } = require("./Subject.controller");
+
 const getStudent = async (req, res, next) => {
   try {
     await DB.authenticate();
@@ -10,9 +12,11 @@ const getStudent = async (req, res, next) => {
       include: "Subjects",
     });
 
+    const subjects = await allSubjects();
+
     return res.render("students/mySubjects.pug", {
       student: student,
-      SUBJECTS: [], //student.Subjects,
+      SUBJECTS: subjects,
     });
   } catch (err) {
     console.log("---------> Unable to connect to database to get student", err);

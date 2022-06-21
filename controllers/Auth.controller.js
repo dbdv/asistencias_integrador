@@ -53,6 +53,7 @@ const registerUser = async (req, res, next) => {
     req.session.token = generateToken(userCreated.id);
     req.session.role = "Student";
     req.session.email = user.email;
+    req.session.idUser = user.id;
 
     res.status(201).send();
   } catch (err) {

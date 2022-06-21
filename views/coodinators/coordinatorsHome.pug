@@ -8,7 +8,7 @@ html
   body
     div.mainContainer
         div.nav#nav 
-            h1=coordinator
+            h1=`${coordinator.first_name} ${coordinator.last_name}`
             div.navButtons
                 //-button(id="showModal" onclick="toggleInscripForm()") Anotarme a una materia
                 button(onclick="logout();") Cerrar sesión
@@ -20,7 +20,7 @@ html
                     h3.blankH3.flexMinus
             each subj in SUBJECTS 
                 div.li 
-                    h3=subj.title
+                    h3=subj.name
                     div.divCircles.flexMinus
                         p=`${subj.average * 100}%`
                         div(id="greenCircle" class=`circle ${subj.average >= 0.75 ? "activeCircle" : "inactiveCircle"}`)

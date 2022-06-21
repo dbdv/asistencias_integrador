@@ -13,7 +13,7 @@ html
                 button(onclick="logout()") Cerrar sesión
         h2#misMaterias Mis materias
         ul.ul#ul
-            each subject in SUBJECTS 
+            each subject in student.Subjects 
                 div.li 
                     h4=subject.title
                     div.subjectsButtons
@@ -28,8 +28,8 @@ html
                     div
                         label Materia
                         select(name="" required="required")
-                            option TUDS 
-                            option Edicion
+                            each subject in SUBJECTS
+                                option(value=subject.id)=subject.name 
                     div 
                         button#signUP Anotarme 
                         button(id="cancel" onclick="return toggleInscripForm();" onsubmit="()=>false;") Cancelar

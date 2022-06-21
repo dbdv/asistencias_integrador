@@ -15,6 +15,9 @@ Subject.init(
     name: {
       type: DataTypes.STRING,
     },
+    average: {
+      type: DataTypes.FLOAT,
+    },
   },
   { sequelize: DB, modelName: "Subject", timestamps: false }
 );
