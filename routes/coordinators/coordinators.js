@@ -2,14 +2,18 @@ var express = require("express");
 var router = express.Router();
 const { allSubjects } = require("../../controllers/Subject.controller");
 const { getUser } = require("../../controllers/User.controller");
+const { addProfessor } = require("../../controllers/Coordinator.controller");
 const {
   addSubject,
   getCoodinator,
+  assignProfessorToSubject,
 } = require("../../controllers/Coordinator.controller");
 
 router.get("/", getCoodinator);
 
 router.post("/subject", addSubject);
+
+// router.post("/assignProffesor");
 
 router.get("/subeject/:id", function (req, res, next) {
   if (req.session.role == "coordinator") {
@@ -17,6 +21,14 @@ router.get("/subeject/:id", function (req, res, next) {
   }
   res.status(403);
   return res.redirect("/");
+});
+
+router.post("/addProf", addProfessor);
+router.post("/linkProf", (req, res, next) => {
+  res.status(200).send();
+});
+router.post("/unlinkProf", (req, res, next) => {
+  res.status(200).send();
 });
 
 module.exports = router;

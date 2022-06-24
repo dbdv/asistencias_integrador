@@ -3,21 +3,25 @@ html
   head
     title Materias
     link(rel="icon" type="image/png" href="/images/favicon.ico")
-    link(rel="stylesheet", href="/stylesheets/coordinators/subject.css")
+    link(rel="stylesheet", href="/stylesheets/coordinators/coordinator.css")
+    script(src="/javascript/coordinator.script.js" defer) 
     
   body
     div.mainContainer
         div.nav#nav 
             h1=`${coordinator.first_name} ${coordinator.last_name}`
             div.navButtons
-                //-button(id="showModal" onclick="toggleInscripForm()") Anotarme a una materia
+                button(onclick=`toggleMngModal()`) Administrar
+                button(onclick="togglelAddSubjectModal()") Crear materia
+                button(onclick="toggleAddProfessorModal()") Crear profesor
                 button(onclick="logout();") Cerrar sesión
+
         ul.ul#ul
             div.li
                     h3.liHeader Materia
                     h3.liHeader.flexMinus Asistencia
-                    h3.liHeader.flexMinus Responsable 
-                    h3.blankH3.flexMinus
+                    h3.liHeader.flexMinus Responsables 
+                    //- h3.blankH3.flexMinus
             each subj in SUBJECTS 
                 div.li 
                     h3=subj.name
@@ -27,33 +31,50 @@ html
                         div(id="yellowCircle" class=`circle ${subj.average < 0.75 ? (subj.average >= 0.5 ? "activeCircle" : "inactiveCircle") : "inactiveCircle"}`)
                         div(id="redCircle" class=`circle ${subj.average < 0.5 ? "activeCircle" : "inactiveCircle"}`)
                     div.flexMinus
-                        select(id=`select${subj.id}`)
-                            option(value="1") Macarena Ruiz  
-                            option(value="4") Julian Rios  
-                            option(value="15") Sofia Reyes
-                            option(value="10") Manuel Diaz  
-                    div.subjectsButtons.flexMinus
-                        //-a(href=`/coordinators/subject/${subj.id}`) 
-                        button(onclick=`updateProf(${subj.id})`) Actualizar
+                        select()
+                            each prof in subj.Users
+                                option=`${prof.first_name} ${prof.last_name}`  
+                            
+                        
+    div(class="backModal")
+    div(class="modalManageSubject")
+        div.mngSubject
+            button(class="closeModal" onclick=`toggleMngModal()`) x
+            div
+                span(class="subjName titles") Materia
+                span.titles Profesores
+                span.titles Accion
+            each subj in SUBJECTS
+                div 
+                    span(class="subjName")=subj.name 
+                    select(id=`select${subj.id}`) 
+                        each prof in professors 
+                            option(value=prof.id)=`${prof.first_name} ${prof.last_name}`
+                    div.buttons
+                        button(class="linkProf" onclick=`linkProf(${subj.id})`) Añadir
+                        button(class="unlinkProf" onclick=`unlinkProf(${subj.id})`) Eliminar
+    div(class="modalAddProfessor")
+        div
+            button(class="closeModal" onclick=`toggleAddProfessorModal()`) x
+            form(method="POST")
+                h3 Datos del profesor
+                input(require onfocus="hideProfError()" type="number" placeholder="DNI" required="required" id="inp-dni")
+                input(require onfocus="hideProfError()" type="text" placeholder="Nombre" required="required" id="inp-firstName")
+                input(require onfocus="hideProfError()" type="text" placeholder="Apellido" required="required" id="inp-lastName")
+                input(require onfocus="hideProfError()" type="email" placeholder="Email" required="required" id="inp-email")
+                input(require onfocus="hideProfError()" type="password" placeholder="Contraseña" required="required" id="inp-pass")
+                span(class="addProfError") Revise los datos e intente nuevamente
+                button(class="createProf" onclick="createProfessor(event)") Crear 
+    div(class="modalAddSubject")
+        div
+            button(class="closeModal" onclick=`togglelAddSubjectModal()`) x
+            form(method="POST")
+                h3 Nueva materia 
+                input(require type="text" id="subjectName" name="name" placeholder="Materia" onfocus="hideSubjError()")
+                span(class="addSubjError") Ya existe una materia con este nombre
+                button(class="createSubj" onclick="createSubject(event)") Crear
+    div(class="errorModal")
+        div 
+            span 
+            button ok
         
-    script.
-        function logout(){
-            console.log("chau")
-            var xhttp = new XMLHttpRequest();
-            xhttp.open("POST", "/auth/logout", true);
-            xhttp.setRequestHeader("Content-Type", "application/json");
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                // Response
-                var response = this.responseText;
-                }
-            };
-            xhttp.send();
-            setTimeout(()=>{
-                location.replace("/");
-            }, 1000)
-        }
-
-        function updateProf(id){
-            console.log("updated")
-        }

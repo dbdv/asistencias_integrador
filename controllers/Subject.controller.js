@@ -1,4 +1,6 @@
 const Subject = require("../models/Subject");
+const UserModel = require("../models/User");
+const ProfessorSubjectModel = require("../models/User-Subject");
 const DB = require("../models/DB");
 
 const allSubjects = async () => {
@@ -9,6 +11,21 @@ const allSubjects = async () => {
   } catch (error) {
     console.error(
       "------> Unable to connect to database to get SUBJECTS: " + error
+    );
+  }
+};
+
+const allSubjectsProfessors = async () => {
+  try {
+    await DB.authenticate();
+    console.log("------> DB CONNECTED");
+    return Subject.findAll({
+      include: [{ model: UserModel, as: "Users" }],
+    });
+  } catch (error) {
+    console.error(
+      "------> Unable to connect to database to get SUBJECTS with Professors: " +
+        error
     );
   }
 };
@@ -34,7 +51,36 @@ const createSubject = async (name) => {
   }
 };
 
+const linkProfessorToSubject = async (idProfessor, idSubject) => {
+  try {
+    await DB.authenticate();
+
+    console.log("------> DB CONNECTED");
+
+    let link = await ProfessorSubjectModel.findOne({
+      where: {
+        id_user: idProfessor,
+        id_subject: idSubject,
+      },
+    });
+
+    if (link) return null;
+
+    return await ProfessorSubjectModel.create({
+      id_user: idProfessor,
+      id_subject: idSubject,
+    });
+  } catch (error) {
+    console.error(
+      "------> Unable to connect to database to get SUBJECTS with Professors: " +
+        error
+    );
+  }
+};
+
 module.exports = {
   allSubjects,
   createSubject,
+  allSubjectsProfessors,
+  linkProfessorToSubject,
 };

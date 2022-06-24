@@ -17,6 +17,38 @@ const getUser = async (email) => {
   }
 };
 
+const getAllStudents = async () => {
+  try {
+    await DB.authenticate();
+    console.log("Dabatase connected");
+
+    return UserModel.findAll({
+      where: {
+        id_role: 3,
+      },
+    });
+  } catch (err) {
+    console.log("Unable to connect to database to get user", err);
+  }
+};
+
+const getAllProfessors = async () => {
+  try {
+    await DB.authenticate();
+    console.log("Dabatase connected");
+
+    return UserModel.findAll({
+      where: {
+        id_role: 2,
+      },
+    });
+  } catch (err) {
+    console.log("Unable to connect to database to get user", err);
+  }
+};
+
 module.exports = {
   getUser,
+  getAllStudents,
+  getAllProfessors,
 };

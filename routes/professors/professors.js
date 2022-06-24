@@ -120,7 +120,7 @@ router.get("/myCourses/course/:id", function (req, res, next) {
       REQUESTS: req.params.id == 2 ? [] : REQUESTS,
       MATRICULATES: [
         {
-          student:{
+          student: {
             first_name: "Gerardo",
             last_name: "Barroso",
             dni: 42937489,
