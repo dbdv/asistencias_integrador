@@ -13,8 +13,11 @@ Attendance.init(
     id_registration: {
       type: DataTypes.INTEGER,
     },
-    date: {
-      type: DataTypes.DATE,
+    day: {
+      type: DataTypes.INTEGER,
+    },
+    month: {
+      type: DataTypes.INTEGER,
     },
   },
   { sequelize: DB, modelName: "Attendance", timestamps: false }

@@ -22,29 +22,39 @@ Schedule.init(
       type: DataTypes.STRING,
     },
   },
-  { sequelize: DB, modelName: "Schedule", timestamps: false }
+  { sequelize: DB, modelName: "horaries", timestamps: false }
 );
 
-Schedule.hasMany(Subject, {
-  as: "Subjects",
-  foreignKey: "id_subject",
-});
+// Schedule.hasMany(Subject, {
+//   as: "Subjects",
+//   foreignKey: "id",
+// });
 
 Schedule.belongsToMany(Subject, {
   through: ScheduleSubject,
-  foreignKey: id_schedule,
-  as: "Schedules",
+  foreignKey: "id_horary",
+  as: "Subjects",
 });
 
 Subject.belongsToMany(Schedule, {
   through: ScheduleSubject,
   foreignKey: "id_subject",
-  as: "Subjects",
+  as: "Schedules",
 });
 
-Subject.hasMany(Schedule, {
-  as: "Schedules",
-  foreignKey: "id_schedule",
+// Subject.hasMany(Schedule, {
+//   as: "Schedules",
+//   foreignKey: "id",
+// });
+
+ScheduleSubject.hasOne(Schedule, {
+  as: "Schedule",
+  foreignKey: "id",
+});
+
+ScheduleSubject.hasOne(Subject, {
+  as: "Subject",
+  foreignKey: "id",
 });
 
 module.exports = Schedule;

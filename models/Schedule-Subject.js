@@ -1,7 +1,7 @@
 const { Model, DataTypes } = require("sequelize");
 const DB = require("./DB");
-const Schedule = require("./Schedule");
-const Subject = require("./Subject");
+// const Schedule = require("./Schedule");
+// const Subject = require("./Subject");
 
 class ScheduleSubject extends Model {}
 
@@ -12,24 +12,14 @@ ScheduleSubject.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    id_schedule: {
+    id_horary: {
       type: DataTypes.INTEGER,
     },
     id_subject: {
       type: DataTypes.INTEGER,
     },
   },
-  { sequelize: DB, modelName: "ScheduleSubject", timestamps: false }
+  { sequelize: DB, modelName: "subjects-horaries", timestamps: false }
 );
-
-ScheduleSubject.hasOne(Schedule, {
-  as: "Schedule",
-  foreignKey: "id_schedule",
-});
-
-ScheduleSubject.hasOne(Subject, {
-  as: "Subject",
-  foreignKey: "id_subject",
-});
 
 module.exports = ScheduleSubject;

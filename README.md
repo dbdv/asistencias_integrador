@@ -1,4 +1,4 @@
-## Cuenta administrador:
+## Cuenta de coordinador administrador:
 
 usuario: admin@admin.com
 

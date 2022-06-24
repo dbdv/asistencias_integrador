@@ -4,6 +4,7 @@ html
     title Mis materias
     link(rel="icon" type="image/png" href="/images/favicon.ico")
     link(rel="stylesheet", href="/stylesheets/students/mySubjects.css")
+    script(src="/javascript/student.script.js" defer) 
   body
     div.mainContainer
         nav.nav#nav 
@@ -12,71 +13,50 @@ html
                 button(id="showModal" onclick="toggleInscripForm()") Anotarme a una materia
                 button(onclick="logout()") Cerrar sesión
         h2#misMaterias Mis materias
+        .nav
+            h3 Activa/s
         ul.ul#ul
-            each subject in student.Subjects 
-                div.li 
-                    h4=subject.title
+            if activeSubjects.length == 0
+                div.li
+                    h4 No hay materias activas actualmente
+            else
+                each subject in activeSubjects
+                    div.li 
+                        h4=subject.name
+                        div
+                            span=startHour
+                        div.subjectsButtons
+                            button#markAttendance Marcar asistencia 
+        .nav
+            h3 Inactivas
+        ul.ul#ul
+            each subject in inactiveSubjects
+                div.li.inactiveSubject 
+                    h4=subject.name
+                    div.horariesSpans
+                        //- span=subject.Schedules
+                        each horary in subject.Schedules 
+                            span=`${horary.startAt}-${horary.endAt}`
                     div.subjectsButtons
-                        button#markAttendance Marcar asistencia 
+        div(id="attendanceErrorModal")
+                    span(class="closeErrorModalButton" onclick="closeAttendanceErrorModal()") X
+                    span(id="attendanceErrorText")
+                    
         .modal-off#modal
             .div-modal
                 h1 Formulario de inscripción
-                form(action="" onsubmit="return preventSubmit();")
+                form(method="POST")
                     //-input(type="number" placeholder="DNI" required="required" id="inp-dni")
                         input(type="text" placeholder="Nombre" required="required")
                         input(type="email" placeholder="Email" required="required")
                     div
                         label Materia
-                        select(name="" required="required")
+                        select(name="subjects" id="subjects" required="required")
                             each subject in SUBJECTS
                                 option(value=subject.id)=subject.name 
                     div 
-                        button#signUP Anotarme 
-                        button(id="cancel" onclick="return toggleInscripForm();" onsubmit="()=>false;") Cancelar
-    
-    script.
-
-        document.onkeydown = function(evt) {
-      
-            if(document.getElementsByClassName("modal").length !== 0){
-                //console.log(document.getElementsByClassName("modal"))
-                evt = evt || window.event;
-                if (evt.keyCode == 27) {
-                    toggleInscripForm();
-                }
-            }
-        };
-
-
-        function preventSubmit(){
-            return false;
-        }
-        function toggleInscripForm(){
-      
-            document.getElementById("modal").classList.toggle("modal");
-            document.getElementById("misMaterias").classList.toggle("on-back");
-            document.getElementById("nav").classList.toggle("on-back");
-            document.getElementById("ul").classList.toggle("on-back");
-            
-        }
-
-        function logout(){
-            console.log("chau")
-            var xhttp = new XMLHttpRequest();
-            xhttp.open("POST", "/auth/logout", true);
-            xhttp.setRequestHeader("Content-Type", "application/json");
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                // Response
-                var response = this.responseText;
-                }
-            };
-            xhttp.send();
-            setTimeout(()=>{
-                location.replace("/");
-            }, 1000)
-        }
-
-        setTimeout(() => {
-            location.reload();
-        }, 1000*60*15);
+                        button(id="signUP" onclick="handleSignUpSubject(event)" type="submit") Anotarme 
+                        button(id="cancel" onclick="return toggleInscripForm()") Cancelar
+                div(id="errorModal")
+                    span(class="closeErrorModalButton" onclick="closeErrorModal()") X
+                    span(id="errorText")

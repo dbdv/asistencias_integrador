@@ -22,25 +22,25 @@ Registration.init(
       type: DataTypes.BOOLEAN,
     },
   },
-  { sequelize: DB, modelName: "Registration", timestamps: false }
+  { sequelize: DB, modelName: "registrations", timestamps: false }
 );
 
 Registration.hasOne(User, {
   as: "User",
-  foreignKey: "id_user",
+  foreignKey: "id",
 });
 Registration.hasOne(Subject, {
   as: "Subject",
-  foreignKey: "id_subject",
+  foreignKey: "id",
 });
 
 Registration.belongsTo(User, {
-  as: "Registration",
-  foreignKey: "id_registration",
+  as: "RegistrationOfUser",
+  foreignKey: "id",
 });
 Registration.belongsTo(Subject, {
-  as: "Registration",
-  foreignKey: "id_registration",
+  as: "RegistrationToSubject",
+  foreignKey: "id",
 });
 
 User.hasMany(Registration, {
