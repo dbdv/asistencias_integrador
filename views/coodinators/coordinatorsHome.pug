@@ -31,7 +31,7 @@ html
                         div(id="yellowCircle" class=`circle ${subj.average < 0.75 ? (subj.average >= 0.5 ? "activeCircle" : "inactiveCircle") : "inactiveCircle"}`)
                         div(id="redCircle" class=`circle ${subj.average < 0.5 ? "activeCircle" : "inactiveCircle"}`)
                     div.flexMinus
-                        select()
+                        select.profInCharge
                             each prof in subj.Users
                                 option=`${prof.first_name} ${prof.last_name}`  
                             
@@ -40,6 +40,7 @@ html
     div(class="modalManageSubject")
         div.mngSubject
             button(class="closeModal" onclick=`toggleMngModal()`) x
+            h3 Administracion de asignaciones
             div
                 span(class="subjName titles") Materia
                 span.titles Profesores

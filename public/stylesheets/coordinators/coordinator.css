@@ -35,7 +35,7 @@ body {
 
 .nav {
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -97,12 +97,13 @@ a:visited {
 
 ul {
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  background-color: white;
 }
 
 .li {
@@ -116,7 +117,7 @@ ul {
 .li > h3 {
   /* width: 200px; */
   font-size: 1rem;
-  text-align: left;
+  text-align: center;
   flex: 1;
 }
 
@@ -131,9 +132,15 @@ ul {
   flex: 1;
 }
 
+.li > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .divCircles {
   display: flex;
-  justify-content: left !important;
+  /* justify-content: left !important; */
   align-items: center;
 }
 
@@ -164,6 +171,18 @@ ul {
 
 .inactiveCircle {
   opacity: 30%;
+}
+
+.profInCharge,
+.profInCharge > option {
+  width: 200px;
+  background-color: var(--main);
+  border-radius: 50px;
+  padding: 3px;
+  /* border: 1px solid black; */
+  border: none;
+  text-align: center;
+  color: white;
 }
 
 .subjectsButtons > button {
@@ -268,25 +287,9 @@ form,
 
 .mngSubject {
   padding: 10px;
-  align-items: flex-start;
+  /* align-items: flex-start; */
   width: 600px;
   position: relative;
-}
-
-.closeModal {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: none;
-  /* color: white; */
-  /* border-radius: 50px; */
-  margin: 0;
-  padding: 2px 6px;
-  font-size: 1.1rem;
-}
-
-.closeModal:hover {
-  color: white;
 }
 
 .mngSubject > div {
@@ -339,6 +342,22 @@ form > button:hover,
 .createSubj {
   background: var(--green-btn-light);
   color: white;
+}
+
+.closeModal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: none;
+  color: white;
+  /* border-radius: 50px; */
+  margin: 0;
+  padding: 2px 6px;
+  font-size: 1.1rem;
+}
+
+.closeModal:hover {
+  color: rgb(230, 102, 102);
 }
 
 .addSubjError,

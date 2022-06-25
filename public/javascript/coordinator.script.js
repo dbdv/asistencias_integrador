@@ -60,12 +60,19 @@ const createProfessor = (evt) => {
     },
     body: JSON.stringify({ professorBody: professor }),
   }).then((res) => {
-    if (res.status === 201) return location.reload();
+    if (res.status === 201) {
+      document.querySelector("#inp-email").value = "";
+      document.querySelector("#inp-pass").value = "";
+      document.querySelector("#inp-dni").value = "";
+      document.querySelector("#inp-firstName").value = "";
+      document.querySelector("#inp-lastName").value = "";
+      return location.reload();
+    }
     const span = document.querySelector(".addProfError");
     span.classList.add("error-on");
     // console.log("error a manejar");
   });
-  console.log("acá");
+  //   console.log("acá");
 };
 
 function linkProf(idSubject) {
@@ -74,10 +81,15 @@ function linkProf(idSubject) {
 
   fetch("/Coordinator/linkProf", {
     method: "POST",
-    headers: { "Conten-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ idProfessor, idSubject }),
   }).then((res) => {
-    console.log(res.status);
+    if (res.status !== 201) {
+      alert("Este profesor ya se encuentra asignado a esta materia");
+      return;
+    }
+
+    location.reload();
   });
 }
 function unlinkProf(idSubject) {

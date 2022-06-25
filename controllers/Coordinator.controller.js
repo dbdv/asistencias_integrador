@@ -48,7 +48,9 @@ const getCoodinator = async (req, res, next) => {
 };
 
 const assignProfessorToSubject = async (req, res, next) => {
-  const { idSubject, idProfessor } = req.body;
+  const { idProfessor, idSubject } = req.body;
+
+  console.log(req.body);
 
   const link = await linkProfessorToSubject(idProfessor, idSubject);
 

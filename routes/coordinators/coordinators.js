@@ -24,9 +24,7 @@ router.get("/subeject/:id", function (req, res, next) {
 });
 
 router.post("/addProf", addProfessor);
-router.post("/linkProf", (req, res, next) => {
-  res.status(200).send();
-});
+router.post("/linkProf", assignProfessorToSubject);
 router.post("/unlinkProf", (req, res, next) => {
   res.status(200).send();
 });

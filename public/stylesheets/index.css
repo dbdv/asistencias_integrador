@@ -22,7 +22,7 @@ body {
 }
 
 .mainContainer {
-  max-width: 800px;
+  max-width: 1200px;
   height: 100vh;
   display: flex;
   align-items: center;
