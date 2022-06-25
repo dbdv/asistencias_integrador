@@ -7,6 +7,7 @@ const {
   addSubject,
   getCoodinator,
   assignProfessorToSubject,
+  unassignProfessorToSubject,
 } = require("../../controllers/Coordinator.controller");
 
 router.get("/", getCoodinator);
@@ -25,8 +26,6 @@ router.get("/subeject/:id", function (req, res, next) {
 
 router.post("/addProf", addProfessor);
 router.post("/linkProf", assignProfessorToSubject);
-router.post("/unlinkProf", (req, res, next) => {
-  res.status(200).send();
-});
+router.post("/unlinkProf", unassignProfessorToSubject);
 
 module.exports = router;

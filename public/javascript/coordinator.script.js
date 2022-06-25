@@ -96,12 +96,19 @@ function unlinkProf(idSubject) {
   const selectElement = document.querySelector(`#select${idSubject}`);
   const idProfessor = selectElement[selectElement.selectedIndex].value;
 
+  //   console.log(idProfessor);
+
   fetch("/Coordinator/unlinkProf", {
     method: "POST",
-    headers: { "Conten-Type": "application/json" },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ idProfessor, idSubject }),
   }).then((res) => {
-    console.log(res.status);
+    if (res.status !== 201) {
+      alert("Este profesor no se encuentra asignado a esta materia");
+      return;
+    }
+
+    location.reload();
   });
 }
 

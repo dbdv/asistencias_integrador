@@ -4,6 +4,7 @@ const {
   createSubject,
   allSubjectsProfessors,
   linkProfessorToSubject,
+  unlinkProfessorToSubject,
 } = require("./Subject.controller");
 const { getUser, getAllProfessors } = require("./User.controller");
 const { createProfessor } = require("./Professor.controller");
@@ -62,9 +63,25 @@ const assignProfessorToSubject = async (req, res, next) => {
   res.status(201).send();
 };
 
+const unassignProfessorToSubject = async (req, res, next) => {
+  const { idProfessor, idSubject } = req.body;
+
+  // console.log(req.body);
+
+  const unlinked = await unlinkProfessorToSubject(idProfessor, idSubject);
+
+  if (!unlinked)
+    return res
+      .status(409)
+      .send({ message: "Este profesor no esta asignado a esta materia" });
+
+  res.status(201).send();
+};
+
 module.exports = {
   addSubject,
   addProfessor,
   getCoodinator,
   assignProfessorToSubject,
+  unassignProfessorToSubject,
 };

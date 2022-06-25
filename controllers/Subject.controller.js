@@ -78,9 +78,36 @@ const linkProfessorToSubject = async (idProfessor, idSubject) => {
   }
 };
 
+const unlinkProfessorToSubject = async (idProfessor, idSubject) => {
+  try {
+    await DB.authenticate();
+
+    console.log("------> DB CONNECTED");
+
+    let link = await ProfessorSubjectModel.findOne({
+      where: {
+        id_user: idProfessor,
+        id_subject: idSubject,
+      },
+    });
+
+    if (!link) return false;
+
+    await link.destroy();
+
+    return true;
+  } catch (error) {
+    console.error(
+      "------> Unable to connect to database to get SUBJECTS with Professors: " +
+        error
+    );
+  }
+};
+
 module.exports = {
   allSubjects,
   createSubject,
   allSubjectsProfessors,
   linkProfessorToSubject,
+  unlinkProfessorToSubject,
 };

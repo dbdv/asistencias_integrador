@@ -11,7 +11,7 @@ UserSubject.init(
       type: DataTypes.INTEGER,
     },
     id_subject: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
     },
   },
   { sequelize: DB, modelName: "users-subjects", timestamps: false }
