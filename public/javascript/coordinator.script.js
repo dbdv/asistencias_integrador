@@ -123,6 +123,10 @@ function logout() {
   });
 }
 
+function goToConflics() {
+  location.replace("/Conflicts");
+}
+
 // ------------- Visuales
 
 function toggleMngModal() {

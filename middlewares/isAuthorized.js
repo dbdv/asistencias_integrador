@@ -14,8 +14,15 @@ const isStudent = (req, res, next) => {
   next();
 };
 
+const isNotStudent = (req, res, next) => {
+  if (req.session.role == "Student") res.status(401).send();
+  console.log("---------------> Estudiante autorizado");
+  next();
+};
+
 module.exports = {
   isCoordinator,
   isProfessor,
   isStudent,
+  isNotStudent,
 };

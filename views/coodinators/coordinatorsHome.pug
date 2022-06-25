@@ -11,6 +11,7 @@ html
         div.nav#nav 
             h1=`${coordinator.first_name} ${coordinator.last_name}`
             div.navButtons
+                button(onclick=`goToConflics()`) Ver conflictos
                 button(onclick=`toggleMngModal()`) Administrar
                 button(onclick="togglelAddSubjectModal()") Crear materia
                 button(onclick="toggleAddProfessorModal()") Crear profesor

@@ -36,21 +36,21 @@ Registration.hasOne(Subject, {
 
 Registration.belongsTo(User, {
   as: "RegistrationOfUser",
-  foreignKey: "id",
+  foreignKey: "id_user",
 });
 Registration.belongsTo(Subject, {
   as: "RegistrationToSubject",
-  foreignKey: "id",
-});
-
-User.hasMany(Registration, {
-  as: "Registrations",
-  foreignKey: "id_user",
-});
-
-Subject.hasMany(Registration, {
-  as: "Resgitrations",
   foreignKey: "id_subject",
 });
+
+// User.hasMany(Registration, {
+//   as: "Registrations",
+//   foreignKey: "id_user",
+// });
+
+// Subject.hasMany(Registration, {
+//   as: "Resgitrations",
+//   foreignKey: "id_subject",
+// });
 
 module.exports = Registration;

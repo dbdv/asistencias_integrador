@@ -13,6 +13,7 @@ const {
   isCoordinator,
   isProfessor,
   isStudent,
+  isNotStudent,
 } = require("./middlewares/isAuthorized");
 
 //-------------Routers
@@ -22,6 +23,7 @@ var authRouter = require("./routes/auth");
 var studentsRouter = require("./routes/students/students");
 var professorsRouter = require("./routes/professors/professors");
 var coordinatorsRouter = require("./routes/coordinators/coordinators");
+var conflictsRouter = require("./routes/conflicts");
 
 var app = express();
 
@@ -55,6 +57,7 @@ app.use(isAuthenticated);
 app.use("/Student", isStudent, studentsRouter);
 app.use("/Professor", isProfessor, professorsRouter);
 app.use("/Coordinator", isCoordinator, coordinatorsRouter);
+app.use("/conflicts", isNotStudent, conflictsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
