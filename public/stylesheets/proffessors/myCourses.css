@@ -16,7 +16,7 @@
 body {
   background-image: url("../../images/bg_bggenerator_com.png");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: auto;
 }
 
 .mainContainer {
@@ -46,11 +46,19 @@ body {
   flex: 1;
 }
 
+.nav > h3 {
+  padding: 3px;
+  margin: 2px;
+}
+
 .navButtons {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: right;
+}
+ul {
+  background-color: white;
 }
 
 .navButtons > button,
@@ -67,12 +75,15 @@ body {
 }
 
 .li > div > a {
-  color: white;
-  background: var(--accent);
+  color: black;
+  /* background: var(--accent); */
+  background-color: white;
+  border: 1px solid var(--accent);
+
   text-decoration: none;
 }
 
-.li > div > a:visited {
+.li > div > a:visited:hover {
   color: white;
 }
 
@@ -113,4 +124,9 @@ a {
 
 button {
   font-size: 0.9rem;
+}
+
+.subjectsButtons > a:hover {
+  color: white;
+  background: var(--accent);
 }

@@ -52,7 +52,7 @@ User.hasMany(Subject, {
 
 User.belongsToMany(Subject, {
   as: "Subjects",
-  through: UserSubject,
+  through: SubjectUser,
   foreignKey: "id_user",
 });
 
@@ -66,10 +66,10 @@ SubjectUser.hasOne(User, {
   as: "User",
   foreignKey: "id_user",
 });*/
-/*
-SubjectUser.hasOne(Subject, {
-  as: "Subject",
-  foreignKey: "id_subject",
-});*/
+
+// SubjectUser.hasOne(Subject, {
+//   as: "Subject",
+//   foreignKey: "id",
+// });
 
 module.exports = User;

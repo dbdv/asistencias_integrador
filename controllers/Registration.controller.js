@@ -43,6 +43,10 @@ const getAllInvalidRegistrations = async (idSubject) => {
       },
       include: [
         {
+          model: UserModel,
+          as: "RegistrationOfUser",
+        },
+        {
           model: SubjectModel,
           as: "RegistrationToSubject",
           include: [{ model: ScheduleModel, as: "Schedules" }],
@@ -57,12 +61,13 @@ const getAllInvalidRegistrations = async (idSubject) => {
   }
 };
 
-const getAllValidRegistrations = async (idStudent) => {
+const getAllValidRegistrations = async (idSubject) => {
   try {
     await DB.authenticate();
     console.log("---------> Dabatase connected");
     return RegistrationModel.findAll({
       where: {
+        id_subject: idSubject,
         validated: true,
       },
       include: [

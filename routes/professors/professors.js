@@ -3,7 +3,10 @@ var router = express.Router();
 const path = require("path");
 var xl = require("excel4node");
 
-const { getProfessor } = require("../../controllers/Professor.controller");
+const {
+  getProfessor,
+  getSubjectOfProfessor,
+} = require("../../controllers/Professor.controller");
 
 const COURSES = [
   {
@@ -87,40 +90,9 @@ const REQUESTS = [
   },
 ];
 
-const HOURS = [];
-var i, j;
-for (i = 8; i < 21; i++) {
-  for (j = 0; j < 4; j++) {
-    HOURS.push(i + ":" + (j === 0 ? "00" : 15 * j));
-  }
-}
-
-HOURS.push("21:00");
-
 router.get("/", getProfessor);
 
-router.get("/myCourses/course/:id", function (req, res, next) {
-  const course = COURSES.find((c) => c.id === parseInt(req.params.id));
-
-  return res.render("professors/course.pug", {
-    course,
-    REQUESTS: req.params.id == 2 ? [] : REQUESTS,
-    MATRICULATES: [
-      {
-        student: {
-          first_name: "Gerardo",
-          last_name: "Barroso",
-          dni: 42937489,
-          email: "gb@mail.com ",
-          carrer: "TUDS",
-        },
-        schdConflicts: { active: true, subjects: ["BBDD", "Ingenieria"] },
-      },
-    ],
-    HOURS_START: HOURS.slice(0, -8),
-    HOURS_END: HOURS.slice(8),
-  });
-});
+router.get("/myCourses/course/:id", getSubjectOfProfessor);
 
 router.get("/myCourses/course/:id/attendance", function (req, res, next) {
   const course = COURSES.find((c) => c.id === parseInt(req.params.id));

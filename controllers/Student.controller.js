@@ -56,7 +56,7 @@ const signUpSubject = async (req, res, next) => {
 
     if (!existSubject) return res.status(400).send();
 
-    let registration = await UserSubjectModel.findOne({
+    let registration = await RegistrationModel.findOne({
       where: {
         id_user: idStudent,
         id_subject: idSubject,
@@ -68,7 +68,7 @@ const signUpSubject = async (req, res, next) => {
         .status(409)
         .send({ message: "Ya está registrado en esta materia" });
 
-    registration = await UserSubjectModel.create({
+    registration = await RegistrationModel.create({
       id_user: idStudent,
       id_subject: idSubject,
     });
