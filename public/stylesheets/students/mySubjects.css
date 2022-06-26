@@ -16,7 +16,7 @@
 body {
   background-image: url("../../images/bg_bggenerator_com.png");
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: auto;
 }
 
 .mainContainer {

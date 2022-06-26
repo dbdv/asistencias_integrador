@@ -32,7 +32,7 @@ body {
   box-sizing: border-box;
 }
 
-.mainContainer > section:last-child{
+.mainContainer > section:last-child {
   border-bottom: 1px solid var(--main);
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
@@ -40,7 +40,7 @@ body {
 
 .nav {
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -60,7 +60,7 @@ section {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: left;
 }
 
@@ -73,7 +73,7 @@ section {
 
 section {
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   align-items: flex-start;
   justify-content: center;
   border-left: 1px solid var(--main);
@@ -123,16 +123,21 @@ ul {
   width: 100%;
   max-width: 800px;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-li, .matriLi {
+li,
+.matriLi {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.headersLi > div, .reqLi > div {
+.headersLi > div,
+.reqLi > div {
   width: 200px;
   flex: 1;
 }
@@ -147,7 +152,7 @@ li, .matriLi {
   opacity: 90%;
 }
 
-.matriLi{
+.matriLi {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -159,20 +164,20 @@ li, .matriLi {
   align-items: center;
 }
 
-.matriLi > div > div{
+.matriLi > div > div {
   padding: 5px;
   margin: 5px;
   width: 200px;
 }
 
-.conflictsDiv{
+.conflictsDiv {
   display: flex;
   max-width: 80%;
   height: 30px;
   padding: 0;
   align-items: center;
   justify-content: left;
-  font-size: .8rem;
+  font-size: 0.8rem;
   background: var(--red-btn-light);
   border: 1px solid var(--red-btn);
   border-radius: 5px;
@@ -185,20 +190,19 @@ li, .matriLi {
   align-items: center;
 }
 
-
-.conflictsDiv:nth-child(2){
+.conflictsDiv:nth-child(2) {
   flex: 1;
   display: flex;
   width: 100%;
 }
 
-.conflictsDiv:nth-child(2) > div > span{
+.conflictsDiv:nth-child(2) > div > span {
   margin: 0 5px;
   /* flex: 1; */
 }
 
 .conflictsDiv:first-child {
-  flex: .5;
+  flex: 0.5;
 }
 .name,
 .email {
@@ -207,7 +211,8 @@ li, .matriLi {
   max-width: 200px;
 }
 
-.requestButtonsDiv, .matriButtonsDiv {
+.requestButtonsDiv,
+.matriButtonsDiv {
   display: flex;
   align-items: center;
 }
@@ -216,7 +221,8 @@ li, .matriLi {
   justify-content: center;
 }
 
-.requestButtonsDiv > button, #dropOutBtn{
+.requestButtonsDiv > button,
+#dropOutBtn {
   width: 40px;
 }
 
@@ -229,13 +235,17 @@ li, .matriLi {
   background: var(--green-btn-light);
 }
 
-#declineBtn, #deleteDateBtn, #dropOutBtn{
-    background: var(--red-btn);
-    color: white;
+#declineBtn,
+#deleteDateBtn,
+#dropOutBtn {
+  background: var(--red-btn);
+  color: white;
 }
 
-#declineBtn:hover, #deleteDateBtn:hover, #dropOutBtn:hover{
-    background: var(--red-btn-light);
+#declineBtn:hover,
+#deleteDateBtn:hover,
+#dropOutBtn:hover {
+  background: var(--red-btn-light);
 }
 
 h5 {
@@ -244,7 +254,8 @@ h5 {
   margin-left: 30px;
 }
 
-.schedule, .exceptedDays {
+.schedule,
+.exceptedDays {
   width: 100%;
   max-width: 400px;
   display: flex;
@@ -255,7 +266,8 @@ h5 {
   margin: 5px;
 }
 
-.scheduleDiv, .exceptedDays > div {
+.scheduleDiv,
+.exceptedDays > div {
   width: 100%;
   display: flex;
   align-items: center;
@@ -272,39 +284,41 @@ select {
   padding: 2px;
 }
 
-.exceptedDays > div{
-    justify-content: flex-start;
+.exceptedDays > div {
+  justify-content: flex-start;
 }
 
-.exceptedDays > div > input{
-    padding: 5px;
-    margin: 5px;
-    text-align: center;
+.exceptedDays > div > input {
+  padding: 5px;
+  margin: 5px;
+  text-align: center;
 }
 
-.dates{
-    width: 100%;
-    max-width: 200px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.dates {
+  width: 100%;
+  max-width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.dates > h3{
-    font-size: .9rem;
-    font-weight: 100;
+.dates > h3 {
+  font-size: 0.9rem;
+  font-weight: 100;
 }
 
 /* .bottomButtons {
   border: none;
 } */
 
-#saveChangesBtn, #addDateBtn {
+#saveChangesBtn,
+#addDateBtn {
   background: var(--green-btn);
   color: white;
 }
 
-#saveChangesBtn:hover, #addDateBtn:hover {
+#saveChangesBtn:hover,
+#addDateBtn:hover {
   background: var(--green-btn-light);
 }
 
