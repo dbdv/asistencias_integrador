@@ -30,44 +30,9 @@ const getStudent = async (req, res, next) => {
     const student = await UserModel.findByPk(idStudent);
     const subjects = await allSubjects();
 
-    // const { activeSubjects, inactiveSubjects } = await splitSubjects(
-    //   registrations
-    // );
-    const activeSubjects = [];
-    const inactiveSubjects = [];
-
-    registrations.map((reg) => {
-      reg.RegistrationToSubject.Schedules.map((sc, index) => {
-        // const alreadyMarkedToday = await markedToday(reg.id);
-        const [dateStart, dateEnd] = generateScheduleDates(sc);
-
-        // console.log(sc, index);
-
-        if (
-          new Date(Date.now()) >= dateStart &&
-          new Date(Date.now()) <= dateEnd &&
-          /*  !alreadyMarkedToday && */
-          dayToIndex(sc.dayOfWeek) === new Date(Date.now()).getDay()
-        ) {
-          activeSubjects.push({
-            ...reg.RegistrationToSubject,
-            startHour: sc.startAt,
-          });
-          return;
-        } /* else {
-          // console.log("**************ENTRÓ AL EL*****************");
-          inactiveSubjects.push(reg.RegistrationToSubject);
-        } */
-
-        if (index == reg.RegistrationToSubject.Schedules.length - 1)
-          inactiveSubjects.push(reg.RegistrationToSubject);
-      });
-    });
-    // const algo = await getActiveSubjects(registrations);
-    // console.log("-----------------------------");
-    // console.log(registrations[0].RegistrationToSubject.Schedules);
-    // console.log(await algo);
-    // console.log("-----------------------------");
+    const { activeSubjects, inactiveSubjects } = await splitSubjects(
+      registrations
+    );
 
     return res.render("students/mySubjects.pug", {
       student: student,

@@ -86,34 +86,48 @@ const getAllValidRegistrations = async (idStudent) => {
 };
 
 const splitSubjects = async (registrations) => {
-  const activeSubjects = [];
-  const inactiveSubjects = [];
-  await registrations.map(async (reg) => {
-    const alreadyMarkedToday = await markedToday(reg.id);
-    reg.RegistrationToSubject.Schedules.map((sc) => {
-      const [dateStart, dateEnd] = generateScheduleDates(sc);
+  try {
+    await DB.authenticate();
+    console.log("---------> Dabatase connected");
+    const activeSubjects = [];
+    const inactiveSubjects = [];
 
-      if (
-        new Date(Date.now()) >= dateStart &&
-        new Date(Date.now()) <= dateEnd &&
-        !alreadyMarkedToday &&
-        dayToIndex(sc.dayOfWeek) === new Date(Date.now()).getDay()
-      ) {
-        activeSubjects.push({
-          ...reg.RegistrationToSubject,
-          startHour: sc.startAt,
+    await Promise.all(
+      registrations.map(async (reg) => {
+        const alreadyMarkedToday = await markedToday(reg.id);
+
+        if (alreadyMarkedToday) {
+          inactiveSubjects.push(reg.RegistrationToSubject);
+          return;
+        }
+        reg.RegistrationToSubject.Schedules.map((sc, index) => {
+          const [dateStart, dateEnd] = generateScheduleDates(sc);
+
+          if (
+            new Date(Date.now()) >= dateStart &&
+            new Date(Date.now()) <= dateEnd &&
+            dayToIndex(sc.dayOfWeek) === new Date(Date.now()).getDay()
+          ) {
+            activeSubjects.push({
+              ...reg.RegistrationToSubject,
+              startHour: sc.startAt,
+            });
+            return;
+          }
+          console.log("*********adentro");
+          if (index == reg.RegistrationToSubject.Schedules.length - 1)
+            inactiveSubjects.push(reg.RegistrationToSubject);
         });
-        return;
-      } else {
-        console.log("**************ENTRÓ AL EL*****************");
-        inactiveSubjects.push(reg.RegistrationToSubject);
-      }
-    });
-  });
+      })
+    );
 
-  console.log("pasó por fuera");
-
-  return { activeSubjects, inactiveSubjects };
+    return { activeSubjects, inactiveSubjects };
+  } catch (err) {
+    console.log(
+      "---------> Unable to connect to database to get split registrations",
+      err
+    );
+  }
 };
 
 const getActiveSubjects = (registrations) => {
