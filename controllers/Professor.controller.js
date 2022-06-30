@@ -1,11 +1,14 @@
 const DB = require("../models/DB");
 const UserModel = require("../models/User");
+const HoraryModel = require("../models/Schedule");
+const ScheduleSubjectModel = require("../models/Schedule-Subject");
 
 const { getUser } = require("../controllers/User.controller");
 const { encrypt } = require("../helpers/bcrypt");
 const {
   getAllInvalidRegistrations,
   getAllValidRegistrations,
+  getRegistration,
 } = require("./Registration.controller");
 const {
   allSubjects,
@@ -64,6 +67,10 @@ const getSubjectOfProfessor = async (req, res, next) => {
   const idProfessor = req.session.idUser;
 
   const subjectInfo = await getSubjectInfo(subjectId, idProfessor);
+  // reg.RegistrationToSubject.Schedules
+
+  console.log("...............");
+  console.log(subjectInfo);
 
   if (!subjectInfo)
     return res.status(404).send({
@@ -72,7 +79,7 @@ const getSubjectOfProfessor = async (req, res, next) => {
     });
   const requests = await getAllInvalidRegistrations(subjectInfo.id);
   const students = await getAllValidRegistrations(subjectInfo.id);
-  console.log(requests, students);
+  // console.log(requests, students);
 
   return res.render("professors/course.pug", {
     subject: subjectInfo,
@@ -83,8 +90,94 @@ const getSubjectOfProfessor = async (req, res, next) => {
   });
 };
 
+const deleteStudent = async (req, res, next) => {
+  const { idStudent, idSubject } = req.body;
+  const registration = await getRegistration(idStudent, idSubject);
+
+  if (!registration) return res.status(404).send();
+
+  await registration.destroy();
+
+  res.status(201).send();
+};
+
+const acceptStudent = async (req, res, next) => {
+  const { idStudent, idSubject } = req.body;
+  const registration = await getRegistration(idStudent, idSubject);
+
+  if (!registration) return res.status(404).send();
+
+  registration.validated = true;
+
+  await registration.save();
+
+  res.status(201).send();
+};
+
+const addHorary = async (req, res, next) => {
+  const { idSubject, horary } = req.body;
+
+  try {
+    await DB.authenticate();
+    console.log("------> DB CONNECTED");
+
+    const [horaryFromDB, created] = await HoraryModel.findOrCreate({
+      where: horary,
+      defaults: horary,
+    });
+
+    if (!horaryFromDB) return res.status(304).send();
+
+    if (!created) {
+      const linked = await ScheduleSubjectModel.findOne({
+        where: {
+          id_subject: idSubject,
+          id_horary: horaryFromDB.id,
+        },
+      });
+      if (linked) return res.status(409).send();
+    }
+
+    const link = await ScheduleSubjectModel.create({
+      id_subject: idSubject,
+      id_horary: horaryFromDB.id,
+    });
+
+    if (!link) return res.status(304).send();
+
+    res.status(201).send();
+  } catch (err) {
+    console.log("Unable to connect to database to create or add horary " + err);
+  }
+};
+
+const deleteHorary = async (req, res, next) => {
+  const { idHorary } = req.body;
+
+  try {
+    await DB.authenticate();
+    console.log("------> DB CONNECTED");
+
+    const link = await ScheduleSubjectModel.findOne({
+      where: { id_horary: idHorary },
+    });
+
+    if (!link) return res.status(404).send();
+
+    await link.destroy();
+
+    res.status(201).send();
+  } catch (err) {
+    console.log("Unable to connect to database to create or add horary " + err);
+  }
+};
+
 module.exports = {
   createProfessor,
   getProfessor,
   getSubjectOfProfessor,
+  deleteStudent,
+  acceptStudent,
+  addHorary,
+  deleteHorary,
 };

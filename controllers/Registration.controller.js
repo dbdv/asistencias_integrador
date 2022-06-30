@@ -119,9 +119,9 @@ const splitSubjects = async (registrations) => {
             });
             return;
           }
-          console.log("*********adentro");
           if (index == reg.RegistrationToSubject.Schedules.length - 1)
             inactiveSubjects.push(reg.RegistrationToSubject);
+          // console.log("*********adentro");
         });
       })
     );
@@ -159,10 +159,30 @@ const getActiveSubjects = (registrations) => {
   });
 };
 
+const getRegistration = async (idStudent, idSubject) => {
+  console.log(idStudent, idSubject);
+  try {
+    await DB.authenticate();
+    console.log("---------> Dabatase connected");
+    return RegistrationModel.findOne({
+      where: {
+        id_user: idStudent,
+        id_subject: idSubject,
+      },
+    });
+  } catch (err) {
+    console.log(
+      "---------> Unable to connect to database to get registration",
+      err
+    );
+  }
+};
+
 module.exports = {
   getValidRegistrations,
   getAllInvalidRegistrations,
   getAllValidRegistrations,
   splitSubjects,
   getActiveSubjects,
+  getRegistration,
 };

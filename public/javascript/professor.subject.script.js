@@ -1,5 +1,5 @@
 window.onload = function () {
-  const week = JSON.stringify(course.week);
+  /* const week = JSON.stringify(course.week);
   //console.log(week)
   for (const day in week) {
     if (week[day].scheduled) {
@@ -10,7 +10,7 @@ window.onload = function () {
         .getElementById(`${day}end${week[day].endAt}`)
         .setAttribute("selected", true);
     }
-  }
+  } */
 };
 
 function preventSubmit() {
@@ -54,4 +54,130 @@ function validateHours(day) {
     return false;
   }
   console.log(hours);
+}
+
+function deleteStudent(idStudent) {
+  const idSubject = document.querySelector(".subjectName").id;
+
+  fetch("/Professor/deleteStudent", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ idStudent, idSubject: parseInt(idSubject) }),
+  }).then((res) => {
+    if (res.status == 201) {
+      location.reload();
+    }
+    console.log(res);
+  });
+}
+
+function acceptStudent(idStudent) {
+  const idSubject = document.querySelector(".subjectName").id;
+
+  fetch("/Professor/acceptStudent", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ idStudent, idSubject: parseInt(idSubject) }),
+  }).then((res) => {
+    if (res.status == 201) {
+      location.reload();
+    }
+    console.log(res);
+  });
+}
+
+function addHorary() {
+  const idSubject = document.querySelector(".subjectName").id;
+
+  if (
+    parseInt(document.querySelector("#startAtHour").value) >
+    parseInt(document.querySelector("#endAtHour").value)
+  ) {
+    alert("No es un horario válido, intente nuevamente");
+    return;
+  }
+
+  if (
+    parseInt(document.querySelector("#startAtHour").value) ==
+      parseInt(document.querySelector("#endAtHour").value) &&
+    parseInt(document.querySelector("#startAtMinutes").value) <
+      parseInt(document.querySelector("#endAtMinutes").value)
+  ) {
+    alert("No es un horario válido, intente nuevamente");
+    return;
+  }
+
+  const startTime =
+    `${
+      document.querySelector("#startAtHour").value.toString().length == 1
+        ? "0" + document.querySelector("#startAtHour").value.toString()
+        : document.querySelector("#startAtHour").value.toString()
+    }` +
+    ":" +
+    `${
+      document.querySelector("#startAtMinutes").value.toString().length == 1
+        ? "0" + document.querySelector("#startAtMinutes").value.toString()
+        : document.querySelector("#startAtMinutes").value.toString()
+    }`;
+
+  const endTime =
+    `${
+      document.querySelector("#endAtHour").value.toString().length == 1
+        ? "0" + document.querySelector("#endAtHour").value.toString()
+        : document.querySelector("#endAtHour").value.toString()
+    }` +
+    ":" +
+    `${
+      document.querySelector("#endAtMinutes").value.toString().length == 1
+        ? "0" + document.querySelector("#endAtMinutes").value.toString()
+        : document.querySelector("#endAtMinutes").value.toString()
+    }`;
+
+  const day =
+    document.querySelector("#dayOfWeek")[
+      document.querySelector("#dayOfWeek").selectedIndex
+    ].value;
+
+  if (endTime.length !== 5 || startTime.length !== 5) {
+    alert("No es un horario válido, intente nuevamente");
+    return;
+  }
+
+  const horary = {
+    dayOfWeek: day,
+    endAt: endTime,
+    startAt: startTime,
+  };
+
+  fetch("/Professor/addHorary", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ idSubject, horary }),
+  }).then((res) => {
+    if (res.status == 201) return location.reload();
+
+    if (res.status == 409)
+      return alert("El horario que intenta agregar ya se encuentra agregado");
+    return console.log("error: " + res.statusText);
+  });
+}
+
+function deleteHorary(id) {
+  fetch("/Professor/deleteHorary", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ idHorary: id }),
+  }).then((res) => {
+    if (res.status == 201) return location.reload();
+
+    console.log("error: " + res.statusText);
+  });
 }

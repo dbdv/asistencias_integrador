@@ -2,6 +2,7 @@ const SubjectModel = require("../models/Subject");
 const UserModel = require("../models/User");
 const ProfessorSubjectModel = require("../models/User-Subject");
 const DB = require("../models/DB");
+const ScheduleModel = require("../models/Schedule");
 
 const allSubjects = async () => {
   try {
@@ -133,7 +134,9 @@ const getSubjectInfo = async (idSubject, idProfessor) => {
 
     if (!link) return null;
 
-    let subject = await SubjectModel.findByPk(link.id_subject);
+    let subject = await SubjectModel.findByPk(link.id_subject, {
+      include: { model: ScheduleModel, as: "Schedules" },
+    });
 
     return subject;
   } catch (error) {

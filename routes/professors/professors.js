@@ -6,6 +6,10 @@ var xl = require("excel4node");
 const {
   getProfessor,
   getSubjectOfProfessor,
+  deleteStudent,
+  acceptStudent,
+  addHorary,
+  deleteHorary,
 } = require("../../controllers/Professor.controller");
 
 const COURSES = [
@@ -92,7 +96,11 @@ const REQUESTS = [
 
 router.get("/", getProfessor);
 
-router.get("/myCourses/course/:id", getSubjectOfProfessor);
+router.get("/course/:id", getSubjectOfProfessor);
+router.post("/deleteStudent", deleteStudent);
+router.post("/acceptStudent", acceptStudent);
+router.post("/addHorary", addHorary);
+router.post("/deleteHorary", deleteHorary);
 
 router.get("/myCourses/course/:id/attendance", function (req, res, next) {
   const course = COURSES.find((c) => c.id === parseInt(req.params.id));

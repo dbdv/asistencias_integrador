@@ -8,7 +8,7 @@ html
   body
     div.mainContainer
         nav.nav#nav 
-            h1=subject.name
+            h1(id=subject.id class="subjectName")=subject.name
             div.navButtons
                 a(href=`/Professor/myCourses/course/${subject.id}/attendance`) 
                     button Ver asistencias 
@@ -22,7 +22,7 @@ html
             .nav 
                 h3 Nuevas inscripciones
             if requests.length !== 0
-                ul 
+                ul.ul 
                     li.headersLi
                         div.name
                             h4 Nombre
@@ -38,23 +38,23 @@ html
                     each request in requests
                         li.reqLi
                             div.reqData.name 
-                                h4=request.RegistrationOfUser.first_name
+                                span=request.RegistrationOfUser.first_name
                             div.reqData.name 
-                                h4=request.RegistrationOfUser.last_name
+                                span=request.RegistrationOfUser.last_name
                             div.reqData 
-                                h4=request.RegistrationOfUser.dni
+                                span=request.RegistrationOfUser.dni
                             div.reqData.email 
-                                h4=request.RegistrationOfUser.email
+                                span=request.RegistrationOfUser.email
                             div.requestButtonsDiv 
-                                button#acceptBtn OK 
-                                button#declineBtn X
+                                button(id="acceptBtn" onclick=`acceptStudent(${request.RegistrationOfUser.id})`) Aceptar 
+                                button(id="declineBtn" onclick=`deleteStudent(${request.RegistrationOfUser.id})`) Rechazar
             else 
                 h5 No hay solicitudes pendientes
         section
             .nav  
                 h3 Alumnos
             if students.length !== 0
-                ul 
+                ul.ul 
                     li.headersLi
                         div.name
                             h4 Nombre
@@ -66,20 +66,20 @@ html
                             h4 Usuario
                        
                         div
-                            h4 Dar de baja
+                            h4 Acción
                     each student in students
                         li.matriLi
                             div
                                 div.reqData.name 
-                                    h4=student.RegistrationOfUser.first_name
+                                    span=student.RegistrationOfUser.first_name
                                 div.reqData.name 
-                                    h4=student.RegistrationOfUser.last_name
+                                    span=student.RegistrationOfUser.last_name
                                 div.reqData 
-                                    h4=student.RegistrationOfUser.dni
+                                    span=student.RegistrationOfUser.dni
                                 div.reqData.email 
-                                    h4=student.RegistrationOfUser.email
-                                div.matriButtonsDiv 
-                                    button#dropOutBtn X
+                                    span=student.RegistrationOfUser.email
+                                div.reqData.matriButtonsDiv 
+                                    button(id="dropOutBtn" onclick=`deleteStudent(${student.RegistrationOfUser.id})`) Dar baja
                             if student.RegistrationOfUser.schdConflicts
                                 div.conflictsDiv 
                                     div
@@ -90,22 +90,46 @@ html
 
             else    
                 h5 No hay alumnos inscriptos a la materia   
-        //-section  
+        section  
             .nav 
                 h3 Horarios de la materia
             .schedule
-                each day in Object.keys(course.week)
-                    div.scheduleDiv
-                        input(type="checkbox" value=day checked=course.week[day].scheduled) 
-                        label=day
-                        select(name="start" id=`${day}StartSelect`)
-                            each hour in HOURS_START
-                                option(value=hour id=`${day}start${hour}` )=hour
-                        select(name="end" id=`${day}EndSelect`) 
-                            each hour in HOURS_END
-                                option(value=hour id=`${day}end${hour}`)=hour
+                
+                div.newHorary 
+                    h3 Nuevo horario
+                    div
+                        label Día
+                        select(name="day" id="dayOfWeek")
+                            option(value="Lunes") Lunes   
+                            option(value="Martes") Martes   
+                            option(value="Miercoles") Miercoles  
+                            option(value="Jueves") Jueves   
+                            option(value="Viernes") Viernes
+                    div
+                        label Empieza
+                        div(style={"display": "flex"})
+                            input(type="number" id="startAtHour" placeholder="Hora" min="8" max="20")
+                            label :   
+                            input(type="number" id="startAtMinutes" placeholder="Minutos" min="0" max="59")
+                    div
+                        label Termina
+                        div(style={"display": "flex"})
+                            input(type="number" id="endAtHour" placeholder="Hora" min="10" max="21")
+                            label : 
+                            input(type="number" id="endAtMinutes" placeholder="Minutos" min="0" max="60") 
+                    button(onclick="addHorary()") Agregar
+                //-div
+                    each schd in subject.Schedules
+                        div.horaries 
+                            h3=`${schd.dayOfWeek} de ${schd.startAt} a ${schd.endAt}` 
+                            button(onclick=`deleteHorary(${schd.id})`) X
+                ul.ul
+                    each schd in subject.Schedules
+                        li.horaries 
+                            span=`${schd.dayOfWeek} de ${schd.startAt} a ${schd.endAt}` 
+                            button(onclick=`deleteHorary(${schd.id})`) Eliminar
 
-                        button(id="saveChangesBtn" onclick=`validateHours("${day}")`) Guardar
+                
             .nav 
                 h3 Fechas excepcionales
             .exceptedDays

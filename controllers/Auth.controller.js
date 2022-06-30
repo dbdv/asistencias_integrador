@@ -42,6 +42,14 @@ const registerUser = async (req, res, next) => {
     await DB.authenticate();
     console.log("-----------> Dabatase connected");
 
+    UserModel.findOne({
+      where: {
+        email: user.email,
+      },
+    }).then((exist) => {
+      if (exist) return res.status(409).send();
+    });
+
     const userCreated = await UserModel.create({
       ...user,
       password: await encrypt(user.password),
