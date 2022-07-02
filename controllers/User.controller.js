@@ -1,6 +1,5 @@
 const DB = require("../models/DB");
 const UserModel = require("../models/User");
-const { encrypt, comparePass } = require("../helpers/bcrypt");
 
 const getUser = async (email) => {
   try {

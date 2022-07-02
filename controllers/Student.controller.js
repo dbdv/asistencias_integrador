@@ -33,8 +33,8 @@ const getStudent = async (req, res, next) => {
     const { activeSubjects, inactiveSubjects } = await splitSubjects(
       registrations
     );
-    console.log("Inscripciones del estudiante: ");
-    console.log(inactiveSubjects);
+    // console.log("Inscripciones del estudiante: ");
+    // console.log(inactiveSubjects);
 
     return res.render("students/mySubjects.pug", {
       student: student,

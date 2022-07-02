@@ -10,9 +10,9 @@ html
         nav.nav#nav 
             h1(id=subject.id class="subjectName")=subject.name
             div.navButtons
-                a(href=`/Professor/myCourses/course/${subject.id}/attendance`) 
+                a(href=`/Professor/course/${subject.id}/attendances`) 
                     button Ver asistencias 
-                a(href=`/Professor/myCourses/course/${subject.id}/attendance/download`) 
+                a(href=`/Professor/course/${subject.id}/attendance/download`) 
                     button(id="downloadExcel") Descargar excel                
                 a(href="/Professor")
                     button Volver atrás

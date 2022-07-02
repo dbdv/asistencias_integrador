@@ -1,55 +1,251 @@
 doctype html
 html
     head
-        title=`Asistencias a ${course.title}`
+        title=`Asistencias a ${subject.name}`
         link(rel="icon" type="image/png" href="/images/favicon.ico")
         link(rel="stylesheet" href="/stylesheets/proffessors/courseAttendance.css")
-    
+        script(defer src="/javascript/professor.attendances.js") 
     body
         div.mainContainer
             nav.nav#nav 
-                h1=`Asistencias a ${course.title}`
+                h1=`Asistencias a ${subject.name}`
                 div.navButtons
-                    a(href=`/proffessors/myCourses/course/${course.id}`)
+                    a(href=`/Proffessor/course/${subject.id}`)
                         button Volver atrás
                     button(onclick="logout()") Cerrar sesión
-            section 
-                div 
-                    select(name="")
-                        each month in MONTHS
+            section.section 
+                div.headersDiv 
+                    select(id="month" onchange="toggleMonth()")
+                        option(value=0) Enero
+                        option(value=1) Febrero
+                        option(value=2) Marzo
+                        option(value=3) Abril
+                        option(value=4) Mayo
+                        option(value=5) Junio
+                        option(value=6) Julio
+                        option(value=7) Agosto
+                        option(value=8) Septiembre
+                        option(value=9) Octubre
+                        option(value=10) Noviembre
+                        option(value=11) Diciembre
+                        //each month in MONTHS
                             option(value=month.name)=month.name  
-                    a(href=`/proffessors/myCourses/course/${course.id}/attendance/download`) 
+                    a(href=`/proffessors/myCourses/subject/${subject.id}/attendance/download`) 
                         button(id="downloadExcel") Descargar excel
-                div 
-                    ul 
-                        li 
-                            div
-                                p.alumno Usuario
-                                p.alumno Nombre
-                                p.alumno Apellido
-                                each day in MONTHS[0]["daysFebrero"]
-                                    p.day=day
-                            each student in STUDENTS 
-                                div 
-                                    p.alumno=student.user
-                                    p.alumno=student.first_name
-                                    p.alumno=student.last_name
-                                    each atten in student.ATTENS 
-                                        p=atten
-            script.
-                function logout(){
-                    console.log("chau")
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.open("POST", "/auth/logout", true);
-                    xhttp.setRequestHeader("Content-Type", "application/json");
-                    xhttp.onreadystatechange = function () {
-                        if (this.readyState == 4 && this.status == 200) {
-                        // Response
-                        var response = this.responseText;
-                        }
-                    };
-                    xhttp.send();
-                    setTimeout(()=>{
-                        location.replace("/");
-                    }, 700)
-                }
+                    //-div(id=0 class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten
+                div.months
+                    div(id="m0" class="div div-on") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                    div 
+                                        span Enero
+                                //-each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        //each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m1" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                    div 
+                                        span Febrero
+                                //-each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        //each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m2" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    div 
+                                        span Marzo
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                //-each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m3" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    div 
+                                        span Abril
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                //each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m4" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                //each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m5" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                //each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m6" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                //each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m7" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                //each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m8" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                //each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m9" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                //each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m10" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                //each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten
+                    div(id="m11" class="div") 
+                        ul 
+                            li 
+                                div
+                                    p.alumno Usuario
+                                    p.alumno Nombre
+                                    p.alumno Apellido
+                                    //each day in MONTHS[0]["daysFebrero"]
+                                        p.day=day
+                                //each student in STUDENTS 
+                                    div 
+                                        p.alumno=student.user
+                                        p.alumno=student.first_name
+                                        p.alumno=student.last_name
+                                        each atten in student.ATTENS 
+                                            p=atten

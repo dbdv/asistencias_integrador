@@ -12,7 +12,9 @@ const { createProfessor } = require("./Professor.controller");
 const addSubject = async (req, res, next) => {
   const { name } = req.body;
 
-  const subject = await createSubject(name);
+  const subject = await createSubject(
+    name.charAt(0).toUpperCase() + name.slice(1)
+  );
 
   if (!subject) res.status(409).send();
 

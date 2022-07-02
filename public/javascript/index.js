@@ -4,7 +4,7 @@ const regexEmail =
 const handleSubmit = (evt) => {
   evt.preventDefault();
   const user = {
-    email: document.querySelector("#inp-email").value,
+    email: document.querySelector("#inp-email").value.toLowerCase(),
     password: document.querySelector("#inp-pass").value,
     dni: document.querySelector("#inp-dni").value,
     first_name: document.querySelector("#inp-firstName").value,
@@ -36,8 +36,8 @@ const handleSubmit = (evt) => {
     },
     body: JSON.stringify({ user: user }),
   }).then((res) => {
-    if (res.status !== 201) console.log("algo mal"); //location.reload();
-    console.log("llegó todo ok");
+    if (res.status !== 201) return alert("algo salió mal");
+    location.replace("/Student");
   });
 
   return false;
@@ -48,7 +48,7 @@ const ingresar = (evt) => {
 
   const errorSpan = document.querySelector("#span");
   const user = {
-    email: document.querySelector("#emailLog").value,
+    email: document.querySelector("#emailLog").value.toLowerCase(),
     password: document.querySelector("#passLog").value,
   };
 

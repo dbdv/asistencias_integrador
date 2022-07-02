@@ -52,13 +52,15 @@ const createSubject = async (name) => {
 
     const exist = await SubjectModel.findOne({
       where: {
-        name: name,
+        name: name.charAt(0).toUpperCase() + name.slice(1),
       },
     });
 
     if (exist) return null;
 
-    return SubjectModel.create({ name: name });
+    return SubjectModel.create({
+      name: name.charAt(0).toUpperCase() + name.slice(1),
+    });
   } catch (error) {
     console.error(
       "------> Unable to connect to database to create SUBJECT: " + error

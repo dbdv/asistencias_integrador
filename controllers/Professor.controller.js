@@ -2,6 +2,7 @@ const DB = require("../models/DB");
 const UserModel = require("../models/User");
 const HoraryModel = require("../models/Schedule");
 const ScheduleSubjectModel = require("../models/Schedule-Subject");
+const AttendanceModel = require("../models/Attendance");
 
 const { getUser } = require("../controllers/User.controller");
 const { encrypt } = require("../helpers/bcrypt");
@@ -15,6 +16,8 @@ const {
   getSubjectInfo,
   allSubjectsOfOneProfessors,
 } = require("./Subject.controller");
+const { findAll } = require("../models/User");
+const Registration = require("../models/Registration");
 
 const HOURS = [];
 var i, j;
@@ -48,7 +51,7 @@ const createProfessor = async (professor) => {
     await DB.authenticate();
     console.log("------> DB CONNECTED");
 
-    let prof = await getUser(professor.email);
+    let prof = await getUser(professor.email.toLowerCase());
 
     if (prof) return null;
 
@@ -172,6 +175,33 @@ const deleteHorary = async (req, res, next) => {
   }
 };
 
+const getAttendaces = async (req, res, next) => {
+  const idSubject = req.params.id;
+
+  try {
+    await DB.authenticate();
+    console.log("------> DB CONNECTED");
+
+    const subject = await AttendanceModel.findAll({
+      include: {
+        model: Registration,
+        as: "Registration",
+        where: {
+          id_subject: idSubject,
+        },
+      },
+    });
+
+    return res.render("professors/courseAttendance.pug", {
+      subject,
+      MONTHS: [],
+      STUDENTS: [],
+    });
+  } catch (err) {
+    console.log("Unable to connect to database to get attendances " + err);
+  }
+};
+
 module.exports = {
   createProfessor,
   getProfessor,
@@ -180,4 +210,5 @@ module.exports = {
   acceptStudent,
   addHorary,
   deleteHorary,
+  getAttendaces,
 };
