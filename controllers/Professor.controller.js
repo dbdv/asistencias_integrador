@@ -18,6 +18,7 @@ const {
 } = require("./Subject.controller");
 const { findAll } = require("../models/User");
 const Registration = require("../models/Registration");
+const { getAttendancesInfo } = require("./Attendance.controller");
 
 const HOURS = [];
 var i, j;
@@ -177,23 +178,29 @@ const deleteHorary = async (req, res, next) => {
 
 const getAttendaces = async (req, res, next) => {
   const idSubject = req.params.id;
+  const idProfessor = req.session.idUser;
 
   try {
     await DB.authenticate();
     console.log("------> DB CONNECTED");
 
-    const subject = await AttendanceModel.findAll({
-      include: {
-        model: Registration,
-        as: "Registration",
-        where: {
-          id_subject: idSubject,
-        },
-      },
-    });
+    const subject = await getSubjectInfo(idSubject, idProfessor);
+    // const attendances = await AttendanceModel.findAll({
+    //   include: {
+    //     model: Registration,
+    //     as: "Registration",
+    //     where: {
+    //       id_subject: idSubject,
+    //     },
+    //   },
+    // });
+    const attendances = await getAttendancesInfo(idSubject);
+
+    // console.log(subject);
+    console.log(attendances[0].Registration);
 
     return res.render("professors/courseAttendance.pug", {
-      subject,
+      subject: {},
       MONTHS: [],
       STUDENTS: [],
     });

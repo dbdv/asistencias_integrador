@@ -48,9 +48,9 @@ Registration.belongsTo(Subject, {
 //   foreignKey: "id_user",
 // });
 
-// Subject.hasMany(Registration, {
-//   as: "Resgitrations",
-//   foreignKey: "id_subject",
-// });
+Subject.hasMany(Registration, {
+  as: "Regitrations",
+  foreignKey: "id_subject",
+});
 
 module.exports = Registration;

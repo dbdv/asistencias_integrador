@@ -1,6 +1,7 @@
 const AttendanceModel = require("../models/Attendance");
-const db = require("../models/DB");
 const DB = require("../models/DB");
+const Registration = require("../models/Registration");
+const User = require("../models/User");
 
 const markedToday = async (id) => {
   try {
@@ -29,6 +30,31 @@ const getTodayAttendances = async () => {
   });
 };
 
+const getAttendancesInfo = async (idSubject) => {
+  try {
+    await DB.authenticate();
+    console.log("Database connected");
+
+    return AttendanceModel.findAll({
+      include: [
+        {
+          model: Registration,
+          as: "Registration",
+          where: {
+            id_subject: idSubject,
+          },
+          include: [{ model: User, as: "RegistrationOfUser" }],
+        },
+      ],
+    });
+  } catch (err) {
+    console.log(
+      "Unable to connect to database to get attentances with users " + err
+    );
+  }
+};
+
 module.exports = {
   markedToday,
+  getAttendancesInfo,
 };
