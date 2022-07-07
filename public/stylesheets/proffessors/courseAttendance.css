@@ -34,7 +34,7 @@ body {
 
 .nav {
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -67,7 +67,7 @@ section {
 
 section {
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   align-items: flex-start;
   justify-content: center;
   border: 1px solid var(--accent);
@@ -108,7 +108,7 @@ select {
 
 section > div {
   width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -117,7 +117,7 @@ section > div {
 }
 ul {
   width: 100%;
-  max-width: 700px;
+  max-width: 1200px;
   max-height: 100%;
   max-height: 400px;
   box-sizing: border-box;

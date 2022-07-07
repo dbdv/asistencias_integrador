@@ -129,14 +129,6 @@ const markAttendance = async (req, res, next) => {
   }
 };
 
-// try {
-//     await DB.authenticate();
-//     console.log("---------> Dabatase connected");
-
-//   } catch (err) {
-//     console.log("---------> Unable to connect to database to sign up student in the subject", err);
-//   }
-
 module.exports = {
   getStudent,
   signUpSubject,

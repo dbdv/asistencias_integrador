@@ -3,9 +3,13 @@ const UserModel = require("../models/User");
 const HoraryModel = require("../models/Schedule");
 const ScheduleSubjectModel = require("../models/Schedule-Subject");
 const AttendanceModel = require("../models/Attendance");
+const RegistrationModel = require("../models/Registration");
+const xl = require("excel4node");
+const path = require("path");
 
 const { getUser } = require("../controllers/User.controller");
 const { encrypt } = require("../helpers/bcrypt");
+const { getMonths, indexToDate, monthsNames } = require("../helpers/dates");
 const {
   getAllInvalidRegistrations,
   getAllValidRegistrations,
@@ -19,16 +23,6 @@ const {
 const { findAll } = require("../models/User");
 const Registration = require("../models/Registration");
 const { getAttendancesInfo } = require("./Attendance.controller");
-
-const HOURS = [];
-var i, j;
-for (i = 8; i < 21; i++) {
-  for (j = 0; j < 4; j++) {
-    HOURS.push(i + ":" + (j === 0 ? "00" : 15 * j));
-  }
-}
-
-HOURS.push("21:00");
 
 const getProfessor = async (req, res, next) => {
   const idProfessor = req.session.idUser;
@@ -89,8 +83,6 @@ const getSubjectOfProfessor = async (req, res, next) => {
     subject: subjectInfo,
     requests,
     students,
-    HOURS_START: HOURS.slice(0, -8),
-    HOURS_END: HOURS.slice(8),
   });
 };
 
@@ -176,7 +168,100 @@ const deleteHorary = async (req, res, next) => {
   }
 };
 
+const getStudentsInfo = async (idSubject) => {
+  try {
+    await DB.authenticate();
+    console.log("---------> Dabatase connected");
+
+    return await UserModel.findAll({
+      include: [
+        {
+          model: RegistrationModel,
+          as: "RegistrationsOfUser",
+          where: {
+            id_subject: idSubject,
+          },
+          include: [{ model: AttendanceModel, as: "Attendances" }],
+        },
+      ],
+    });
+  } catch (err) {
+    console.log(
+      "---------> Unable to connect to database to get students info",
+      err
+    );
+  }
+};
+
 const getAttendaces = async (req, res, next) => {
+  const idProfessor = req.session.idUser;
+  const idSubject = req.params.id;
+
+  try {
+    await DB.authenticate();
+    console.log("------> DB CONNECTED");
+
+    const subject = await getSubjectInfo(idSubject, idProfessor);
+    const horaries = subject.Schedules;
+    const attendances = await getAttendancesInfo(idSubject);
+    const students = await getStudentsInfo(idSubject);
+
+    const validDays = new Set();
+    horaries.map((h) => {
+      validDays.add(h.dayOfWeek);
+    });
+    // console.log(subject);
+    // const setDates = new Set();
+    // attendances.map((att) => {
+    //   setDates.add(`${att.day}/${att.month}/2022`);
+    // });
+
+    const months = getMonths();
+    const validMonths = months.map((m) => {
+      const validMonth = [];
+      m.map((d) => {
+        if (validDays.has(indexToDate(d.getDay()))) {
+          validMonth.push(d);
+        }
+      });
+      return validMonth;
+    });
+
+    students.map((s) => {
+      const attendances = [];
+      validMonths.map((m) => {
+        const aux = [];
+        m.map((d) => {
+          aux.push(
+            s.RegistrationsOfUser[0].Attendances.some(
+              (a) => d.getDate() == a.day && d.getMonth() == a.month - 1,
+              d.getDate(),
+              d.getMonth()
+            )
+              ? "P"
+              : "A"
+          );
+        });
+
+        attendances.push(aux);
+      });
+
+      s.attParse = attendances;
+    });
+
+    return res.render("professors/courseAttendance.pug", {
+      subject: subject,
+      MONTHS: validMonths,
+      students,
+      attendances,
+      monthsNames,
+    });
+  } catch (err) {
+    console.log("Unable to connect to database to get attendances " + err);
+  }
+};
+
+const downloadExcel = async (req, res, next) => {
   const idSubject = req.params.id;
   const idProfessor = req.session.idUser;
 
@@ -185,27 +270,385 @@ const getAttendaces = async (req, res, next) => {
     console.log("------> DB CONNECTED");
 
     const subject = await getSubjectInfo(idSubject, idProfessor);
-    // const attendances = await AttendanceModel.findAll({
-    //   include: {
-    //     model: Registration,
-    //     as: "Registration",
-    //     where: {
-    //       id_subject: idSubject,
-    //     },
-    //   },
-    // });
+    const horaries = subject.Schedules;
     const attendances = await getAttendancesInfo(idSubject);
+    const students = await getStudentsInfo(idSubject);
 
+    const validDays = new Set();
+    horaries.map((h) => {
+      validDays.add(h.dayOfWeek);
+    });
     // console.log(subject);
-    console.log(attendances[0].Registration);
+    // const setDates = new Set();
+    // attendances.map((att) => {
+    //   setDates.add(`${att.day}/${att.month}/2022`);
+    // });
 
-    return res.render("professors/courseAttendance.pug", {
-      subject: {},
-      MONTHS: [],
-      STUDENTS: [],
+    const months = getMonths();
+    const validMonths = months.map((m) => {
+      const validMonth = [];
+      m.map((d) => {
+        if (validDays.has(indexToDate(d.getDay()))) {
+          validMonth.push(d);
+        }
+      });
+      return validMonth;
+    });
+
+    students.map((s) => {
+      const attendances = [];
+      validMonths.map((m) => {
+        const aux = [];
+        m.map((d) => {
+          aux.push(
+            s.RegistrationsOfUser[0].Attendances.some(
+              (a) => d.getDate() == a.day && d.getMonth() == a.month - 1,
+              d.getDate(),
+              d.getMonth()
+            )
+              ? "P"
+              : "A"
+          );
+        });
+
+        attendances.push(aux);
+      });
+
+      s.attParse = attendances;
+    });
+
+    /*  const ATTENDANCES = [
+      {
+        month: "Febrero",
+        dates: [
+          "Usuario",
+          "Nombre",
+          "Apellido",
+          "17/02",
+          "19/02",
+          "20/02",
+          "25/02",
+          "26/02",
+          "01/03",
+          "03/03",
+          "17/02",
+          "19/02",
+          "20/02",
+          "25/02",
+          "26/02",
+          "01/03",
+          "03/03",
+        ],
+        students: [
+          {
+            first_name: "Juan",
+            last_name: "Perez",
+            user: "JuanPerezUser",
+            ATTENS: [
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+            ],
+          },
+          {
+            first_name: "Lucas",
+            last_name: "Diaz",
+            user: "LucasDiazUser",
+            ATTENS: [
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+            ],
+          },
+          {
+            first_name: "Romina",
+            last_name: "Quiroga",
+            user: "RominaQuirogaUser",
+            ATTENS: [
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+            ],
+          },
+          {
+            first_name: "Lucia",
+            last_name: "Leyes",
+            user: "LuciaLeyesUser",
+            ATTENS: [
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+            ],
+          },
+        ],
+      },
+      {
+        month: "Marzo",
+        dates: [
+          "Usuario",
+          "Nombre",
+          "Apellido",
+          "17/02",
+          "19/02",
+          "20/02",
+          "25/02",
+          "26/02",
+          "01/03",
+          "03/03",
+          "17/02",
+          "19/02",
+          "20/02",
+          "25/02",
+          "26/02",
+          "01/03",
+          "03/03",
+        ],
+        students: [
+          {
+            first_name: "Juan",
+            last_name: "Perez",
+            user: "JuanPerezUser",
+            ATTENS: [
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+            ],
+          },
+          {
+            first_name: "Lucas",
+            last_name: "Diaz",
+            user: "LucasDiazUser",
+            ATTENS: [
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+            ],
+          },
+          {
+            first_name: "Romina",
+            last_name: "Quiroga",
+            user: "RominaQuirogaUser",
+            ATTENS: [
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+            ],
+          },
+          {
+            first_name: "Lucia",
+            last_name: "Leyes",
+            user: "LuciaLeyesUser",
+            ATTENS: [
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+              "P",
+            ],
+          },
+        ],
+      },
+    ]; */
+    const wb = new xl.Workbook();
+    const style = wb.createStyle({
+      alignment: {
+        horizontal: "center",
+        vertical: "center",
+      },
+      border: {
+        left: {
+          style: "medium",
+          color: "#3b78a3",
+        },
+        right: {
+          style: "medium",
+          color: "#3b78a3",
+        },
+        top: {
+          style: "medium",
+          color: "#3b78a3",
+        },
+        bottom: {
+          style: "medium",
+          color: "#3b78a3",
+        },
+      },
+      font: {
+        size: 14,
+      },
+      fill: {
+        bgColor: "#3b78a3",
+        type: "pattern",
+      },
+    });
+
+    validMonths.map((month, index) => {
+      let i = 2,
+        j = 4;
+      let ws = wb.addWorksheet(`${monthsNames[index]}`);
+
+      month.map((day) => {
+        // let formatedDate = date.split("/").reverse().join("-");
+        // formatedDate = [...formatedDate]
+        // console.log(formatedDate)
+        ws.cell(1, 1).string("Usuario");
+        ws.cell(1, 2).string("Nombre");
+        ws.cell(1, 3).string("Apellido");
+        ws.cell(1, j).string(`${day.getDate()}/${day.getMonth() + 1}/22`);
+        // ws.cell(1, j).date(`2022-${formatedDate}`).style({numberFormat: 'dd/mm/yyyy'});
+        j++;
+      });
+
+      j = 4;
+
+      students.map((stud) => {
+        ws.cell(i, 1).string(stud.email);
+        ws.cell(i, 2).string(stud.first_name);
+        ws.cell(i, 3).string(stud.last_name);
+        stud.attParse[index].map((att) => {
+          ws.cell(i, j).string(att);
+          j++;
+        });
+        j = 4;
+        i++;
+      });
+
+      ws.cell(1, 1).style(style);
+      ws.cell(1, 2).style(style);
+      ws.cell(1, 3).style(style);
+    });
+
+    const pathExcel = path.join(
+      __dirname,
+      "excels",
+      `Asistencias a ${subject.name}.xlsx`
+    );
+    wb.write(pathExcel, async (err, stats) => {
+      if (err) console.log(err);
+      else {
+        return res.download(pathExcel);
+      }
     });
   } catch (err) {
-    console.log("Unable to connect to database to get attendances " + err);
+    console.log("Unable to connect to database to download excel " + err);
   }
 };
 
@@ -218,4 +661,6 @@ module.exports = {
   addHorary,
   deleteHorary,
   getAttendaces,
+  downloadExcel,
+  getStudentsInfo,
 };

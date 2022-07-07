@@ -135,8 +135,8 @@ html
             .exceptedDays
                 div 
                     label Nueva fecha
-                    input(type="date")
-                    button(id="addDateBtn") Añadir
+                    input(type="date" id="exceptionalDate" min=`${new Date(Date.now()).toLocaleDateString()}`)
+                    button(id="addDateBtn" onclick="addExceptionalDate()") Añadir
                 ul 
                     li 
                         div.dates

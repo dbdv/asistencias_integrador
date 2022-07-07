@@ -13,6 +13,21 @@ const indexs = {
   Viernes: 5,
 };
 
+const monthsNames = [
+  "Enero",
+  "Febrero",
+  "Marzo",
+  "Abril",
+  "Mayo",
+  "Junio",
+  "Julio",
+  "Agosto",
+  "Septiembre",
+  "Octubre",
+  "Noviembre",
+  "Diciembre",
+];
+
 const dayToIndex = (day) => indexs[day];
 
 const indexToDate = (day) => days[day];
@@ -39,9 +54,62 @@ function generateScheduleDates(schedule) {
   return [dateStart, dateEnd];
 }
 
+function getDatesOfMonth(month) {
+  const dates = [];
+
+  let year = 2022;
+
+  let daysInMonth /* = new Date(year, month + 1, 0).getDate() */;
+  if (month == new Date(Date.now()).getMonth()) {
+    daysInMonth = new Date(Date.now()).getDate();
+  } else {
+    daysInMonth = new Date(year, month + 1, 0).getDate();
+  }
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    dates.push(new Date(year, month, day));
+  }
+
+  return dates;
+}
+function getAllDatesOfMonth(month) {
+  const dates = [];
+
+  let year = 2022;
+
+  let daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    dates.push(new Date(year, month, day));
+  }
+
+  return dates;
+}
+
+function getMonths() {
+  const months = [];
+  for (let month = 0; month <= new Date(Date.now()).getMonth(); month++) {
+    months.push(getDatesOfMonth(month));
+  }
+
+  return months;
+}
+
+function getAllMonths() {
+  const months = [];
+  for (let month = 0; month <= 11; month++) {
+    months.push(getAllDatesOfMonth(month));
+  }
+
+  return months;
+}
+
 module.exports = {
   dayToIndex,
   indexToDate,
   currentTimeToString,
   generateScheduleDates,
+  getMonths,
+  getAllMonths,
+  monthsNames,
 };

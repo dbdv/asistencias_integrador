@@ -19,6 +19,9 @@ Attendance.init(
     month: {
       type: DataTypes.INTEGER,
     },
+    date: {
+      type: DataTypes.DATE,
+    },
   },
   { sequelize: DB, modelName: "Attendance", timestamps: false }
 );

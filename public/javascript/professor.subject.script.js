@@ -181,3 +181,29 @@ function deleteHorary(id) {
     console.log("error: " + res.statusText);
   });
 }
+
+function addExceptionalDate() {
+  const idSubject = document.querySelector(".subjectName").id;
+  const date = document.querySelector("#exceptionalDate").value;
+  // console.log(new Date(Date.now()).toDateString(), "dateString");
+  // console.log(new Date(Date.now()).toLocaleDateString(), "localedateString");
+  // console.log(new Date(Date.now()).toLocaleString(), "localeString");
+
+  if (!date || new Date(date).getTime() < new Date(Date.now()).getTime())
+    return alert("No ha seleccionado una fecha");
+
+  const [, month, day] = date.split("-");
+  // console.log(day, month);
+
+  fetch(`/Professor/${idSubject}/addExceptionalDate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ day: parseInt(day), month: parseInt(month) }),
+  }).then((res) => {
+    if (res.status !== 201)
+      return alert("La fecha que seleccionó no es válida, intente nuevamente");
+    console.log("OK");
+  });
+}

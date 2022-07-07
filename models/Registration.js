@@ -43,10 +43,10 @@ Registration.belongsTo(Subject, {
   foreignKey: "id_subject",
 });
 
-// User.hasMany(Registration, {
-//   as: "Registrations",
-//   foreignKey: "id_user",
-// });
+User.hasMany(Registration, {
+  as: "RegistrationsOfUser",
+  foreignKey: "id_user",
+});
 
 Subject.hasMany(Registration, {
   as: "Regitrations",
