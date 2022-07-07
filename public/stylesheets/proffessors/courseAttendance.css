@@ -112,7 +112,7 @@ section > div {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin: 5px;
+  /* margin: 5px;  */
   padding: 5px;
 }
 ul {
@@ -187,8 +187,9 @@ li > div > p:nth-child(2) {
 
 .months {
   position: relative;
-  width: 1000px;
-  height: 600px;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 400px;
 }
 
 .headersDiv {
@@ -200,6 +201,7 @@ li > div > p:nth-child(2) {
   z-index: -1;
   opacity: 0;
   position: absolute;
+  width: 95%;
 }
 
 .div-on {

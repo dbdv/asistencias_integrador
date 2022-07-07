@@ -285,6 +285,12 @@ h5 {
   margin-left: 20px;
 }
 
+.exceptedDays > div {
+  max-width: 255px;
+  flex-direction: column;
+  margin-left: 0;
+}
+
 .scheduleDiv > label {
   width: 100px;
 }
@@ -310,6 +316,7 @@ select {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 0 !important;
 }
 
 .dates > h3 {
@@ -317,6 +324,11 @@ select {
   font-weight: 100;
 }
 
+.dates > button,
+.dates > div,
+.dates > h3 {
+  margin: 0 !important;
+}
 /* .bottomButtons {
   border: none;
 } */
@@ -402,4 +414,8 @@ select {
 
 .horaries > button:hover {
   background: var(--red-btn-light);
+}
+
+.auxLi {
+  margin-left: 0 !important;
 }

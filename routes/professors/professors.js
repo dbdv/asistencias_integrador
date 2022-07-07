@@ -1,6 +1,7 @@
 var express = require("express");
 const {
   addExceptionalDate,
+  deleteExceptionalDates,
 } = require("../../controllers/ExceptionalDates.controller");
 var router = express.Router();
 
@@ -23,6 +24,7 @@ router.post("/acceptStudent", acceptStudent);
 router.post("/addHorary", addHorary);
 router.post("/deleteHorary", deleteHorary);
 router.post("/:id/addExceptionalDate", addExceptionalDate);
+router.post("/deleteExceptionalDate", deleteExceptionalDates);
 router.get("/course/:id/attendances", getAttendaces);
 router.get("/course/:id/attendance/download", downloadExcel);
 

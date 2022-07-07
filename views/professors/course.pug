@@ -134,12 +134,13 @@ html
                 h3 Fechas excepcionales
             .exceptedDays
                 div 
-                    label Nueva fecha
+                    h3 Nueva fecha
                     input(type="date" id="exceptionalDate" min=`${new Date(Date.now()).toLocaleDateString()}`)
                     button(id="addDateBtn" onclick="addExceptionalDate()") Añadir
-                ul 
-                    li 
-                        div.dates
-                            h3 17/07
-                            button#deleteDateBtn Eliminar
+                ul.ul
+                    each date in exceptionalDates 
+                        li.horaries.auxLi 
+                            div.dates
+                                h3=`${date.day}/${date.month}`
+                                button#deleteDateBtn(onclick=`deleteExceptionalDate(${date.id})`) Eliminar
 

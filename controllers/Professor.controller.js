@@ -23,6 +23,7 @@ const {
 const { findAll } = require("../models/User");
 const Registration = require("../models/Registration");
 const { getAttendancesInfo } = require("./Attendance.controller");
+const { getExceptionalDates } = require("./ExceptionalDates.controller");
 
 const getProfessor = async (req, res, next) => {
   const idProfessor = req.session.idUser;
@@ -65,10 +66,11 @@ const getSubjectOfProfessor = async (req, res, next) => {
   const idProfessor = req.session.idUser;
 
   const subjectInfo = await getSubjectInfo(subjectId, idProfessor);
+  const exceptionalDates = await getExceptionalDates(subjectId);
   // reg.RegistrationToSubject.Schedules
 
-  console.log("...............");
-  console.log(subjectInfo);
+  // console.log("...............");
+  // console.log(subjectInfo);
 
   if (!subjectInfo)
     return res.status(404).send({
@@ -77,12 +79,14 @@ const getSubjectOfProfessor = async (req, res, next) => {
     });
   const requests = await getAllInvalidRegistrations(subjectInfo.id);
   const students = await getAllValidRegistrations(subjectInfo.id);
+  // console.log(exceptionalDates);
   // console.log(requests, students);
 
   return res.render("professors/course.pug", {
     subject: subjectInfo,
     requests,
     students,
+    exceptionalDates: exceptionalDates ?? [],
   });
 };
 
@@ -205,6 +209,7 @@ const getAttendaces = async (req, res, next) => {
     const horaries = subject.Schedules;
     const attendances = await getAttendancesInfo(idSubject);
     const students = await getStudentsInfo(idSubject);
+    const exceptionalDates = await getExceptionalDates(idSubject);
 
     const validDays = new Set();
     horaries.map((h) => {
@@ -234,10 +239,11 @@ const getAttendaces = async (req, res, next) => {
         m.map((d) => {
           aux.push(
             s.RegistrationsOfUser[0].Attendances.some(
-              (a) => d.getDate() == a.day && d.getMonth() == a.month - 1,
-              d.getDate(),
-              d.getMonth()
-            )
+              (a) => d.getDate() == a.day && d.getMonth() == a.month - 1
+            ) ||
+              exceptionalDates.some(
+                (exc) => d.getDate() == exc.day && d.getMonth() == exc.month - 1
+              )
               ? "P"
               : "A"
           );

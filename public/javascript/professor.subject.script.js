@@ -204,6 +204,19 @@ function addExceptionalDate() {
   }).then((res) => {
     if (res.status !== 201)
       return alert("La fecha que seleccionó no es válida, intente nuevamente");
-    console.log("OK");
+    location.reload();
+  });
+}
+
+function deleteExceptionalDate(id) {
+  fetch(`/Professor/deleteExceptionalDate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id_exceptional: id }),
+  }).then((res) => {
+    if (res.status !== 201) return alert("Hubo un error, intente nuevamente");
+    location.reload();
   });
 }
