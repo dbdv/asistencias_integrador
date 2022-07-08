@@ -5,9 +5,12 @@ const {
   allSubjectsProfessors,
   linkProfessorToSubject,
   unlinkProfessorToSubject,
+  getSubjectInfo,
 } = require("./Subject.controller");
 const { getUser, getAllProfessors } = require("./User.controller");
-const { createProfessor } = require("./Professor.controller");
+const { createProfessor, getStudentsInfo } = require("./Professor.controller");
+const { getExceptionalDates } = require("./ExceptionalDates.controller");
+const { indexToDate, getMonths } = require("../helpers/dates");
 
 const addSubject = async (req, res, next) => {
   const { name } = req.body;
@@ -39,9 +42,73 @@ const getCoodinator = async (req, res, next) => {
   if (!coordinator)
     res.status(404).send({ mesagge: "Coordinador no encontrado" });
 
-  const SUBJECTS = await allSubjectsProfessors();
+  let SUBJECTS = await allSubjectsProfessors();
   const professors = await getAllProfessors();
-  // console.log(SUBJECTS[0]);
+
+  //------------------------------
+
+  SUBJECTS = await Promise.all(
+    SUBJECTS.map(async (subject) => {
+      if (subject.Users[0]) {
+        const subjectAux = await getSubjectInfo(
+          subject.id,
+          subject.Users[0].id
+        );
+        const horaries = subjectAux.Schedules;
+        const students = await getStudentsInfo(subjectAux.id);
+        const exceptionalDates = await getExceptionalDates(subjectAux.id);
+
+        const validDays = new Set();
+        horaries.map((h) => {
+          validDays.add(h.dayOfWeek);
+        });
+
+        const months = getMonths();
+        const validMonths = months.map((m) => {
+          const validMonth = [];
+          m.map((d) => {
+            if (validDays.has(indexToDate(d.getDay()))) {
+              validMonth.push(d);
+            }
+          });
+          return validMonth;
+        });
+
+        let total = 0,
+          presents = 0;
+
+        students.map((s) => {
+          validMonths.map((m) => {
+            m.map((d) => {
+              if (
+                s.RegistrationsOfUser[0].Attendances.some(
+                  (a) => d.getDate() == a.day && d.getMonth() == a.month - 1
+                ) ||
+                exceptionalDates.some(
+                  (exc) =>
+                    d.getDate() == exc.day && d.getMonth() == exc.month - 1
+                )
+              ) {
+                total++;
+                presents++;
+              } else {
+                total++;
+              }
+            });
+          });
+        });
+
+        subject.average =
+          total == 0 ? 0 : Math.floor((presents * 100) / total) / 100;
+        await subject.save();
+      }
+      return subject;
+    })
+  );
+
+  //------------------------------
+
+  // console.log(SUBJECTS[6]);
 
   return res.render("coodinators/coordinatorsHome.pug", {
     coordinator,
