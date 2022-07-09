@@ -12,7 +12,8 @@ html
                 h1=`${professor.first_name} ${professor.last_name}`
                 div.navButtons
                     //-button(id="showModal" onclick="toggleInscripForm()") Anotarme a una materia
-                    button() Ver conflictos
+                    button(onclick=`goToConflics()`) Ver conflictos
+                        //- a(href="/Conflicts") 
                     button(onclick="logout();") Cerrar sesión
             h2 Bienvenido
             .nav 

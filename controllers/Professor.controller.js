@@ -277,7 +277,8 @@ const downloadExcel = async (req, res, next) => {
 
     const subject = await getSubjectInfo(idSubject, idProfessor);
     const horaries = subject.Schedules;
-    const attendances = await getAttendancesInfo(idSubject);
+    // const attendances = await getAttendancesInfo(idSubject);
+    const exceptionalDates = await getExceptionalDates(idSubject);
     const students = await getStudentsInfo(idSubject);
 
     const validDays = new Set();
@@ -311,7 +312,10 @@ const downloadExcel = async (req, res, next) => {
               (a) => d.getDate() == a.day && d.getMonth() == a.month - 1,
               d.getDate(),
               d.getMonth()
-            )
+            ) ||
+              exceptionalDates.some(
+                (exc) => d.getDate() == exc.day && d.getMonth() == exc.month - 1
+              )
               ? "P"
               : "A"
           );

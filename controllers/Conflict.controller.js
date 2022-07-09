@@ -105,7 +105,8 @@ const getConflicts = async (req, res, next) => {
       });
     });
 
-    res.json(conflicts);
+    // res.json(conflicts);
+    res.render("conflicts.pug", { conflicts });
   } catch (err) {
     console.error("Unable to connect to database to get conflicts", err);
   }

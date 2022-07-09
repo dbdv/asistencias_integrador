@@ -8,3 +8,7 @@ function logout() {
     location.replace("/");
   });
 }
+
+function goToConflics() {
+  location.replace("/Conflicts");
+}
