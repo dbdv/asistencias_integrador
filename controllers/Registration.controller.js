@@ -111,15 +111,28 @@ const splitSubjects = async (registrations) => {
           if (
             new Date(Date.now()) >= dateStart &&
             new Date(Date.now()) <= dateEnd &&
+            !inactiveSubjects.some(
+              (sub) => sub.id == reg.RegistrationToSubject.subject_id
+            ) &&
+            !activeSubjects.some(
+              (sub) => sub.id == reg.RegistrationToSubject.subject_id
+            ) &&
             dayToIndex(sc.dayOfWeek) === new Date(Date.now()).getDay()
           ) {
             activeSubjects.push({
               ...reg.RegistrationToSubject,
               startHour: sc.startAt,
             });
-            return;
-          }
-          if (index == reg.RegistrationToSubject.Schedules.length - 1)
+            // return;
+          } else if (
+            !inactiveSubjects.some(
+              (sub) => sub.id == reg.RegistrationToSubject.subject_id
+            ) &&
+            !activeSubjects.some(
+              (sub) => sub.id == reg.RegistrationToSubject.subject_id
+            ) &&
+            index == reg.RegistrationToSubject.Schedules.length - 1
+          )
             inactiveSubjects.push(reg.RegistrationToSubject);
           // console.log("*********adentro");
         });

@@ -261,3 +261,25 @@ button {
 .inactiveSubject {
   opacity: 0.5;
 }
+
+.msgDiv > span,
+.msgMark > span {
+  max-width: fit-content;
+  text-align: center;
+  font-size: 0.8rem;
+  margin: 0 auto;
+  display: none;
+}
+
+.msgDiv-on > span,
+.msgMark-on > span {
+  display: inherit;
+}
+
+.errorStyle {
+  color: tomato;
+}
+
+.okStyle {
+  color: var(--green-btn);
+}

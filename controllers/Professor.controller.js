@@ -197,6 +197,32 @@ const getStudentsInfo = async (idSubject) => {
   }
 };
 
+const getValidStudentsInfo = async (idSubject) => {
+  try {
+    await DB.authenticate();
+    console.log("---------> Dabatase connected");
+
+    return await UserModel.findAll({
+      include: [
+        {
+          model: RegistrationModel,
+          as: "RegistrationsOfUser",
+          where: {
+            id_subject: idSubject,
+            validated: true,
+          },
+          include: [{ model: AttendanceModel, as: "Attendances" }],
+        },
+      ],
+    });
+  } catch (err) {
+    console.log(
+      "---------> Unable to connect to database to get students info",
+      err
+    );
+  }
+};
+
 const getAttendaces = async (req, res, next) => {
   const idProfessor = req.session.idUser;
   const idSubject = req.params.id;
@@ -208,7 +234,7 @@ const getAttendaces = async (req, res, next) => {
     const subject = await getSubjectInfo(idSubject, idProfessor);
     const horaries = subject.Schedules;
     const attendances = await getAttendancesInfo(idSubject);
-    const students = await getStudentsInfo(idSubject);
+    const students = await getValidStudentsInfo(idSubject);
     const exceptionalDates = await getExceptionalDates(idSubject);
 
     const validDays = new Set();
@@ -279,7 +305,7 @@ const downloadExcel = async (req, res, next) => {
     const horaries = subject.Schedules;
     // const attendances = await getAttendancesInfo(idSubject);
     const exceptionalDates = await getExceptionalDates(idSubject);
-    const students = await getStudentsInfo(idSubject);
+    const students = await getValidStudentsInfo(idSubject);
 
     const validDays = new Set();
     horaries.map((h) => {
@@ -673,4 +699,5 @@ module.exports = {
   getAttendaces,
   downloadExcel,
   getStudentsInfo,
+  getValidStudentsInfo,
 };

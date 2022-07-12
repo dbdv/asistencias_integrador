@@ -7,7 +7,7 @@ const ScheduleModel = require("../models/Schedule");
 const RegistrationModel = require("../models/Registration");
 const AttendanceModel = require("../models/Attendance");
 
-const { Op } = require("sequelize");
+// const { Op } = require("sequelize");
 
 const { allSubjects } = require("./Subject.controller");
 const { markedToday } = require("./Attendance.controller");
@@ -17,7 +17,7 @@ const {
   getActiveSubjects,
 } = require("./Registration.controller");
 
-const { generateScheduleDates, dayToIndex } = require("../helpers/dates");
+// const { generateScheduleDates, dayToIndex } = require("../helpers/dates");
 
 const getStudent = async (req, res, next) => {
   const idStudent = req.session.idUser;
@@ -34,7 +34,7 @@ const getStudent = async (req, res, next) => {
       registrations
     );
     // console.log("Inscripciones del estudiante: ");
-    // console.log(inactiveSubjects);
+    // console.log(activeSubjects);
 
     return res.render("students/mySubjects.pug", {
       student: student,
@@ -88,20 +88,41 @@ const signUpSubject = async (req, res, next) => {
 
 const markAttendance = async (req, res, next) => {
   const { idSubject } = req.body;
-  const idStudent = res.session.idUser;
+  const idStudent = req.session.idUser;
 
   try {
     await DB.authenticate();
     console.log("---------> Dabatase connected");
 
-    let registration = await UserSubjectModel.findOne({
+    let registration = await RegistrationModel.findOne({
       where: {
         id_user: idStudent,
         id_subject: idSubject,
       },
+      include: [
+        {
+          model: SubjectModel,
+          as: "RegistrationToSubject",
+          include: [{ model: ScheduleModel, as: "Schedules" }],
+        },
+      ],
     });
 
     if (!registration) res.status(404).send();
+
+    if (
+      !registration.RegistrationToSubject.Schedules.some((sch) => {
+        const hour = parseInt(sch.startAt.split(":")[0]);
+        const minutes = parseInt(sch.startAt.split(":")[1]) + 30;
+
+        const currentTime = new Date();
+        const compareTime = new Date();
+        compareTime.setHours(hour, minutes);
+
+        return currentTime.getTime() <= compareTime.getTime();
+      })
+    )
+      return res.status(409).send({ message: "Está fuera de horario" });
 
     let attendance = await AttendanceModel.findOne({
       where: {

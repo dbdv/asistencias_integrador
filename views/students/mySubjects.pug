@@ -14,7 +14,7 @@ html
                 button(onclick="logout()") Cerrar sesión
         h2#misMaterias Mis materias
         .nav
-            h3 Activa/s
+            h3 Hoy
         ul.ul#ul
             if activeSubjects.length == 0
                 div.li
@@ -22,11 +22,11 @@ html
             else
                 each subject in activeSubjects
                     div.li 
-                        h4=subject.name
-                        div
-                            span=startHour
+                        h4=`${subject.dataValues.name}`
+                        div(id=`span${subject.dataValues.id}` class="msgMark")
+                            span#msgMark
                         div.subjectsButtons
-                            button#markAttendance Marcar asistencia 
+                            button(id="markAttendance" onclick=`markAttendance(${subject.dataValues.id})`) Marcar asistencia 
         .nav
             h3 Inactivas
         ul.ul#ul
@@ -53,10 +53,12 @@ html
                         label Materia
                         select(name="subjects" id="subjects" required="required")
                             each subject in SUBJECTS
-                                option(value=subject.id)=subject.name 
+                                option(value=subject.id)=subject.name
+                    div.msgDiv#msgDiv 
+                        span#msg 
                     div 
                         button(id="signUP" onclick="handleSignUpSubject(event)" type="submit") Anotarme 
                         button(id="cancel" onclick="return toggleInscripForm()") Cancelar
-                div(id="errorModal")
-                    span(class="closeErrorModalButton" onclick="closeErrorModal()") X
-                    span(id="errorText")
+                //- div(id="errorModal")
+                //-     span(class="closeErrorModalButton" onclick="closeErrorModal()") X
+                //-     span(id="errorText")

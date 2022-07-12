@@ -29,11 +29,12 @@ const handleSignUpSubject = (evt) => {
     if (res.status !== 201) {
       const data = await res.json();
       const message = data.message;
-      showErrorMessage(message);
+      showMessage(message, false);
       return;
     }
 
-    location.reload();
+    showMessage("Solicitud exitosa", true);
+    // location.reload();
   });
 
   return false;
@@ -50,11 +51,12 @@ function markAttendance(id) {
     if (res.status !== 201) {
       const data = await res.json();
       const message = data.message;
-      showAttendanceErrorMessage(message);
+      showAttendanceErrorMessage(message, false, id);
       return;
     }
+    showAttendanceErrorMessage("Asistencia marcada!", true, id);
 
-    location.reload();
+    // location.reload();
   });
 }
 
@@ -64,24 +66,37 @@ function toggleInscripForm() {
   document.getElementById("misMaterias").classList.toggle("on-back");
   document.getElementById("nav").classList.toggle("on-back");
   document.getElementById("ul").classList.toggle("on-back");
+  hideMessage();
 
   return false;
 }
 
-function showErrorMessage(message) {
-  const errorModal = document.querySelector("#errorModal");
-  const errorText = document.querySelector("#errorText");
-
-  errorText.innerText = message;
-  errorModal.classList.add("errorModal-on");
+function showMessage(message, status) {
+  // const errorModal = document.querySelector("#errorModal");
+  // const errorText = document.querySelector("#errorText");
+  // errorText.innerText = message;
+  // errorModal.classList.add("errorModal-on");
+  const msgContainer = document.querySelector("#msgDiv");
+  const text = document.querySelector("#msg");
+  text.innerText = message;
+  msgContainer.classList.add("msgDiv-on", status ? "okStyle" : "errorStyle");
 }
 
-function showAttendanceErrorMessage(message) {
-  const attendanceErrorModal = document.querySelector("#attendanceErrorModal");
-  const errorText = document.querySelector("#attendanceErrorText");
+function hideMessage() {
+  const msgContainer = document.querySelector("#msgDiv");
+  msgContainer.classList.remove("msgDiv-on", status ? "okStyle" : "errorStyle");
+}
 
-  errorText.innerText = message;
-  attendanceErrorModal.classList.add("errorModal-on");
+function showAttendanceErrorMessage(message, status, id) {
+  // const attendanceErrorModal = document.querySelector("#attendanceErrorModal");
+  // const errorText = document.querySelector("#attendanceErrorText");
+
+  // errorText.innerText = message;
+  // attendanceErrorModal.classList.add("errorModal-on");
+  const msgContainer = document.querySelector(`#span${id}`);
+  const text = document.querySelector("#msgMark");
+  text.innerText = message;
+  msgContainer.classList.add("msgMark-on", status ? "okStyle" : "errorStyle");
 }
 
 function closeErrorModal() {

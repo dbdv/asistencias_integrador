@@ -84,7 +84,10 @@ const getConflicts = async (req, res, next) => {
               // console.log(".....sch: ", JSON.stringify(sch));
               // console.log(".....schAux: ", JSON.stringify(schAux));
               // console.log("-----------DIV-----------");
-              if (sch.id == schAux.id) {
+              if (
+                sch.id == schAux.id &&
+                !conflicts.some((conf) => conf.student.id === student.id)
+              ) {
                 conflicts.push(
                   formatConflict(student, subject, sch, subjectAux, schAux)
                 );
@@ -92,6 +95,7 @@ const getConflicts = async (req, res, next) => {
 
               if (
                 sch.dayOfWeek == schAux.dayOfWeek &&
+                !conflicts.some((conf) => conf.student.id === student.id) &&
                 ((sch.endAt >= schAux.startAt && sch.endAt <= schAux.endAt) ||
                   (sch.startAt >= schAux.startAt && sch.startAt < schAux.endAt))
               ) {
